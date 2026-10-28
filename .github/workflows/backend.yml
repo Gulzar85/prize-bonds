@@ -1,0 +1,107 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python
+        run: uv python install 3.14
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          uv sync --all-extras
+
+      - name: Lint with ruff
+        run: |
+          cd backend
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Type check with mypy
+        run: |
+          cd backend
+          uv run mypy .
+
+      - name: Run tests with coverage
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+          REDIS_URL: redis://localhost:6379/0
+          DJANGO_SETTINGS_MODULE: config.settings.test
+          SECRET_KEY: test-secret
+        run: |
+          cd backend
+          uv run pytest --cov --cov-fail-under=90
+
+      - name: Check migrations
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+          DJANGO_SETTINGS_MODULE: config.settings.test
+          SECRET_KEY: test-secret
+        run: |
+          cd backend
+          uv run python manage.py makemigrations --check --dry-run
+
+      - name: Check deploy settings
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
+          DJANGO_SETTINGS_MODULE: config.settings.prod
+          SECRET_KEY: test-secret-key-for-check
+          ALLOWED_HOSTS: example.com
+        run: |
+          cd backend
+          uv run python manage.py check --deploy
+
+      - name: Export OpenAPI schema
+        env:
+          DJANGO_SETTINGS_MODULE: config.settings.test
+          SECRET_KEY: test-secret
+        run: |
+          cd backend
+          uv run python manage.py spectacular --file openapi.yaml
+
+      - name: Check schema drift
+        run: |
+          cd backend
+          git diff --exit-code openapi.yaml || (echo "Schema drift detected" && exit 1)
+
+      - name: Security audit
+        run: |
+          cd backend
+          uv run pip-audit
