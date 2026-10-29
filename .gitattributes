@@ -1,3 +1,5 @@
 # Fixtures are byte-exact copies of third-party files (hashes in manifest.json); never convert line endings.
 backend/tests/fixtures/** -text
 backend/apps/draws/ingestion/certs/** -text
+infra/docker/Dockerfile text eol=lf
+*.yaml text eol=lf
