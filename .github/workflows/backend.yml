@@ -57,6 +57,7 @@ jobs:
           DJANGO_SETTINGS_MODULE: config.settings.prod
           SECRET_KEY: ${{ secrets.CI_DEPLOY_CHECK_KEY || 'x7Kq9mP2vL8nR4tY6wZ1bC3dF5gH0jA9sD2fG4hJ6kL8mN0pQ2rT4vX6zB8cE1' }}
           ALLOWED_HOSTS: example.com
+          JWT_PRIVATE_KEY: ci-placeholder
         run: uv run python manage.py check --deploy --fail-level WARNING
       - name: OpenAPI schema matches the committed openapi.yaml
         env:

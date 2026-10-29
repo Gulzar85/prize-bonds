@@ -8,7 +8,7 @@ A public, multi-tenant app for Pakistani households to track National Savings pr
 - Custom User model with email authentication
 - Email verification with django-allauth
 - TOTP MFA support
-- JWT authentication for API clients
+- JWT authentication for API clients (allauth headless built-in strategy, see ADR 0004)
 - Role-based access control (OWNER, EDITOR, VIEWER)
 - Tenant isolation enforced at all levels
 - Comprehensive security (CSP, HSTS, Argon2, etc.)
@@ -49,10 +49,22 @@ make createsuperuser
 - Admin: http://localhost:8000/admin/
 - Health: http://localhost:8000/health/ready/
 
+### Without Docker
+
+```bash
+cd backend && uv sync
+DJANGO_SETTINGS_MODULE=config.settings.test uv run pytest   # in-memory SQLite unless DATABASE_URL is set
+```
+
+Auth endpoints for native clients live under `/api/v1/auth/app/v1/` (signup, email verification, login,
+`tokens/refresh`, TOTP and recovery codes); their OpenAPI spec is at `/api/v1/auth/openapi.yaml`.
+Set `JWT_PRIVATE_KEY` (RSA PEM) in `.env`; generate one with
+`openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048`.
+
 ## Development Commands
 
 ```bash
-make up          # Start all services
+make up          # Start all services (infra/compose.yaml)
 make down        # Stop all services
 make build       # Build images
 make test        # Run tests with coverage

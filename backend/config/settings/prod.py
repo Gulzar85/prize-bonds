@@ -15,6 +15,9 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
+# A real signing key is mandatory in production (no ephemeral fallback).
+HEADLESS_JWT_PRIVATE_KEY = env("JWT_PRIVATE_KEY").replace(chr(92) + "n", chr(10))  # type: ignore
+
 # CSP already defined in base for Django 6.1
 
 # Sentry

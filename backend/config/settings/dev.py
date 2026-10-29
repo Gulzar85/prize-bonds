@@ -38,3 +38,14 @@ STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
+
+# Ephemeral signing key unless JWT_PRIVATE_KEY is set: dev tokens stop working after a restart.
+if not HEADLESS_JWT_PRIVATE_KEY:
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric import rsa
+
+    HEADLESS_JWT_PRIVATE_KEY = (
+        rsa.generate_private_key(public_exponent=65537, key_size=2048)
+        .private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption())
+        .decode()
+    )
