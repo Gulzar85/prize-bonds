@@ -34,7 +34,7 @@ def sent_alerts(monkeypatch):
 
 
 def make_operator(mfa: bool = True, **kwargs):
-    user = UserFactory(**kwargs)
+    user = UserFactory(**{"is_staff": True, **kwargs})  # operators work in the Django admin
     user.groups.add(Group.objects.get(name="data_operator"))
     if mfa:
         Authenticator.objects.create(user=user, type=Authenticator.Type.TOTP, data={"secret": "x"})

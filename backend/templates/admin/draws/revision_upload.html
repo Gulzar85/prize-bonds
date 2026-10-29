@@ -1,0 +1,16 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a> &rsaquo;
+  <a href="{% url 'admin:draws_drawrevision_changelist' %}">Draw revisions</a> &rsaquo; Upload
+</div>
+{% endblock %}
+{% block content %}
+<p>Use this when the website changed or a file could not be read. The file goes through the same checks as a
+downloaded one, and <strong>a different operator must approve it</strong> before it is published.</p>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Upload and parse" class="default">
+</form>
+{% endblock %}

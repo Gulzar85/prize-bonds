@@ -1,0 +1,84 @@
+{% extends "admin/base_site.html" %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a> &rsaquo;
+  <a href="{% url 'admin:draws_drawrevision_changelist' %}">Draw revisions</a> &rsaquo; Review
+</div>
+{% endblock %}
+{% block content %}
+{% with revision=review.revision %}
+<h2>{{ revision.draw }} &mdash; revision {{ revision.revision_no }} <small>[{{ revision.status }}]</small></h2>
+
+<table>
+  <tr><th>Source</th><td>{% if revision.source_url %}{{ revision.source_url }}{% else %}manual upload by {{ revision.uploaded_by|default:"-" }}{% endif %}</td></tr>
+  <tr><th>Link text</th><td>{{ revision.link_text|default:"-" }}</td></tr>
+  <tr><th>File</th><td>.{{ revision.file_ext }}, {{ revision.size_bytes }} bytes, SHA-256 {{ revision.sha256 }}</td></tr>
+  <tr><th>Extraction</th><td>{{ revision.extraction_method|default:"-" }}{% if revision.extraction_method == "OCR" %} <strong>(OCR: verify every number)</strong>{% endif %}</td></tr>
+  <tr><th>Fetched</th><td>{{ revision.fetched_at }}</td></tr>
+  {% if revision.reviewed_by %}<tr><th>Reviewed</th><td>{{ revision.reviewed_by }} at {{ revision.reviewed_at }}: {{ revision.review_note }}</td></tr>{% endif %}
+</table>
+
+<h3>Header read from the file</h3>
+<table>
+  {% for key, value in review.header.items %}<tr><th>{{ key }}</th><td>{{ value|default_if_none:"(not in file)" }}</td></tr>{% endfor %}
+</table>
+
+<h3>Announced vs parsed counts</h3>
+<table>
+  <thead><tr><th>Tier</th><th>Amount (Rs)</th><th>Announced</th><th>Parsed</th><th></th></tr></thead>
+  <tbody>
+  {% for tier in review.tiers %}
+    <tr>
+      <td>{{ tier.rank }}</td><td>{{ tier.amount_pkr }}</td>
+      <td>{{ tier.announced|default_if_none:"(not stated)" }}</td><td>{{ tier.parsed }}</td>
+      <td>{% if tier.matches is None %}&ndash;{% elif tier.matches %}match{% else %}<strong>MISMATCH</strong>{% endif %}</td>
+    </tr>
+  {% empty %}<tr><td colspan="5">No tiers were read from this file.</td></tr>{% endfor %}
+  </tbody>
+</table>
+
+<h3>Findings</h3>
+{% if review.errors %}
+  <h4>Errors (block publication until overridden)</h4>
+  <ul class="errorlist">{% for f in review.errors %}<li><strong>{{ f.code }}</strong>: {{ f.message }}</li>{% endfor %}</ul>
+{% endif %}
+{% if review.warnings %}
+  <h4>Warnings</h4>
+  <ul>{% for f in review.warnings %}<li><strong>{{ f.code }}</strong>: {{ f.message }}</li>{% endfor %}</ul>
+{% endif %}
+{% if not review.errors and not review.warnings %}<p>No findings.</p>{% endif %}
+
+<h3>Difference from the previous revision</h3>
+{% if review.diff %}
+  <p>{{ review.diff.changed_numbers }} number(s) changed ({{ review.diff.ratio|floatformat:2 }} of the total).</p>
+  <table>
+    {% for rank, change in review.diff.tiers.items %}
+      <tr><th>Tier {{ rank }}</th><td>added {{ change.added_count }}: {{ change.added|join:", " }}<br>removed {{ change.removed_count }}: {{ change.removed|join:", " }}</td></tr>
+    {% endfor %}
+    {% for field, pair in review.diff.header.items %}<tr><th>{{ field }}</th><td>{{ pair.0 }} &rarr; {{ pair.1 }}</td></tr>{% endfor %}
+    {% for rank, pair in review.diff.amounts.items %}<tr><th>Tier {{ rank }} amount</th><td>{{ pair.0 }} &rarr; {{ pair.1 }}</td></tr>{% endfor %}
+  </table>
+{% else %}<p>This is the first revision of the draw.</p>{% endif %}
+
+<h3>Source text around each tier heading</h3>
+{% if review.source_unavailable %}<p class="errornote">{{ review.source_unavailable }}</p>{% endif %}
+{% for excerpt in review.excerpts %}<pre>{{ excerpt.text }}</pre>{% endfor %}
+
+<h3>Sample of parsed numbers next to their source lines</h3>
+<table>
+  <thead><tr><th>Tier</th><th>Number</th><th>Source line</th></tr></thead>
+  <tbody>{% for s in review.samples %}<tr><td>{{ s.rank }}</td><td>{{ s.number }}</td><td><code>{{ s.source }}</code></td></tr>{% endfor %}</tbody>
+</table>
+
+{% if can_decide %}
+<h3>Decision</h3>
+{% if four_eyes and revision.uploaded_by %}<p>Four-eyes rule is on: this upload was made by {{ revision.uploaded_by }} and must be approved by someone else.</p>{% endif %}
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" name="decision" value="approve" class="default">
+  <input type="submit" name="decision" value="reject">
+</form>
+{% endif %}
+{% endwith %}
+{% endblock %}
