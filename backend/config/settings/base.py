@@ -324,6 +324,7 @@ DRAWS_MIN_REQUEST_INTERVAL = env.float("DRAWS_MIN_REQUEST_INTERVAL", default=2.0
 DRAWS_MAX_FILE_BYTES = 20 * 1024 * 1024
 DRAWS_FOUR_EYES = env.bool("DRAWS_FOUR_EYES", default=False)  # on in prod: uploader may not approve their own upload
 DRAWS_AUTO_APPROVE_CLEAN_BACKFILL = env.bool("DRAWS_AUTO_APPROVE_CLEAN_BACKFILL", default=True)
+DRAWS_HISTORICAL_AFTER_DAYS = env.int("DRAWS_HISTORICAL_AFTER_DAYS", default=30)  # newer draws are "live"
 
 # Frontend URL
 FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")

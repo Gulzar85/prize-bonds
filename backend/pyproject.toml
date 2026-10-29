@@ -86,7 +86,7 @@ ignore_missing_imports = true
 
 # django-rules and celery are untyped; the draws scaffold is replaced in Phase 1.
 [[tool.mypy.overrides]]
-module = ["apps.households.rules", "apps.core.tasks"]
+module = ["apps.households.rules", "apps.draws.rules", "apps.core.tasks"]
 ignore_errors = true
 
 [[tool.mypy.overrides]]

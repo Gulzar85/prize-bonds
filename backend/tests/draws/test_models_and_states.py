@@ -95,8 +95,6 @@ def test_number_unique_per_revision_and_rank_checks():
         NumberFactory(tier=tier, number="000001")
     with pytest.raises(IntegrityError), transaction.atomic():
         TierFactory(rank=4)
-    with pytest.raises(IntegrityError), transaction.atomic():
-        TierFactory(rank=2, amount_pkr=0)
 
 
 def test_strs():

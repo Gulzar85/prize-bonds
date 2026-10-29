@@ -174,6 +174,7 @@ class DrawRevision(UUIDModel, TimeStampedModel):
 class PrizeTier(UUIDModel, TimeStampedModel):
     revision = models.ForeignKey(DrawRevision, on_delete=models.DB_CASCADE, related_name="tiers")
     rank = models.PositiveSmallIntegerField()
+    #: 0 means the file gave no usable amount; the validators report that as an error.
     amount_pkr = models.PositiveBigIntegerField()
     announced_count = models.PositiveIntegerField(null=True, blank=True)
     parsed_count = models.PositiveIntegerField()
@@ -183,7 +184,6 @@ class PrizeTier(UUIDModel, TimeStampedModel):
         constraints = [
             models.UniqueConstraint(fields=["revision", "rank"], name="tier_revision_rank_uniq"),
             models.CheckConstraint(condition=models.Q(rank__gte=1, rank__lte=3), name="tier_rank_1_to_3"),
-            models.CheckConstraint(condition=models.Q(amount_pkr__gt=0), name="tier_amount_positive"),
         ]
 
     def __str__(self) -> str:
