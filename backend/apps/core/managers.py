@@ -1,17 +1,38 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
 from django.db import models
+from django.db.models import FETCH_PEERS
+
+if TYPE_CHECKING:
+    from apps.accounts.models import User
+    from apps.households.models import Household
 
 
-class HouseholdScopedManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset()
+class FetchPeersManager(models.Manager[Any]):
+    """Project-wide default manager.
 
-    def for_household(self, household):
+    Django 6.1 fetch modes: FETCH_PEERS loads a deferred field or related object
+    for every instance fetched by the same query in one extra query, so lazy
+    access inside a loop never turns into an N+1.
+    """
+
+    def get_queryset(self) -> models.QuerySet[Any]:
+        return super().get_queryset().fetch_mode(FETCH_PEERS)
+
+
+class SoftDeleteManager(FetchPeersManager):
+    def get_queryset(self) -> models.QuerySet[Any]:
+        return super().get_queryset().filter(deleted_at__isnull=True)
+
+
+class HouseholdScopedManager(FetchPeersManager):
+    def for_household(self, household: Household) -> models.QuerySet[Any]:
         return self.get_queryset().filter(household=household)
 
-    def visible_to(self, user):
-        from apps.households.models import Membership
-
-        household_ids = Membership.objects.filter(user=user).values_list(
-            "household_id", flat=True
+    def visible_to(self, user: User) -> models.QuerySet[Any]:
+        return self.get_queryset().filter(
+            household__memberships__user=user,
+            household__deleted_at__isnull=True,
         )
-        return self.get_queryset().filter(household_id__in=household_ids)

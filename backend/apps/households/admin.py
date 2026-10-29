@@ -4,14 +4,14 @@ from apps.households.models import Household, Membership
 
 
 @admin.register(Household)
-class HouseholdAdmin(admin.ModelAdmin):
+class HouseholdAdmin(admin.ModelAdmin[Household]):
     list_display = ["name", "created_by", "created_at"]
     search_fields = ["name"]
     readonly_fields = ["created_at", "updated_at"]
 
 
 @admin.register(Membership)
-class MembershipAdmin(admin.ModelAdmin):
+class MembershipAdmin(admin.ModelAdmin[Membership]):
     list_display = ["user", "household", "role", "created_at"]
     list_filter = ["role"]
     search_fields = ["user__email", "household__name"]

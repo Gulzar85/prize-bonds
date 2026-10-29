@@ -2,7 +2,10 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+import django_stubs_ext
 import environ
+
+django_stubs_ext.monkeypatch()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -32,8 +35,6 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "rest_framework",
-    "rest_framework_simplejwt",
-    "rest_framework_simplejwt.token_blacklist",
     "drf_spectacular",
     "corsheaders",
     "django_filters",
@@ -60,6 +61,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "api.v1.throttles.AuthEndpointThrottleMiddleware",
     "apps.core.middleware.RequestIDMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -140,14 +142,17 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+}
 
 # Media files
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"  # only for third-party apps; ours use UUIDv7 PKs
 
 # Custom user model
 AUTH_USER_MODEL = "accounts.User"
@@ -155,6 +160,7 @@ AUTH_USER_MODEL = "accounts.User"
 # Authentication backends
 AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesStandaloneBackend",
+    "django.contrib.auth.backends.ModelBackend",
     "rules.permissions.ObjectPermissionBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
@@ -167,8 +173,6 @@ ACCOUNT_EMAIL_VERIFICATION = env("ACCOUNT_EMAIL_VERIFICATION", default="mandator
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
-ACCOUNT_ADAPTER = "apps.accounts.adapter.AccountAdapter"
-ACCOUNT_FORMS = {}
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 
@@ -179,7 +183,7 @@ MFA_PASSKEY_LOGIN_ENABLED = False
 # REST Framework
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "allauth.headless.contrib.rest_framework.authentication.JWTTokenAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
@@ -199,26 +203,34 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "anon": "100/hour",
         "user": "1000/hour",
-        "login": "5/minute",
-        "signup": "3/hour",
-        "password_reset": "3/hour",
-        "mfa": "10/minute",
     },
     "EXCEPTION_HANDLER": "apps.core.exceptions.custom_exception_handler",
 }
 
-# Simple JWT
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=env.int("JWT_ACCESS_TOKEN_LIFETIME_MINUTES", default=15)),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=env.int("JWT_REFRESH_TOKEN_LIFETIME_DAYS", default=30)),
-    "ROTATE_REFRESH_TOKENS": True,
-    "BLACKLIST_AFTER_ROTATION": True,
-    "UPDATE_LAST_LOGIN": True,
-    "ALGORITHM": "HS256",
-    "AUTH_HEADER_TYPES": ("Bearer",),
-    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
-    "USER_ID_FIELD": "id",
-    "USER_ID_CLAIM": "user_id",
+# allauth headless: JWT access/refresh tokens for native clients (see ADR 0004)
+HEADLESS_TOKEN_STRATEGY = "allauth.headless.tokens.strategies.jwt.JWTTokenStrategy"
+HEADLESS_JWT_ALGORITHM = "RS256"
+HEADLESS_JWT_PRIVATE_KEY = env("JWT_PRIVATE_KEY", default="").replace(chr(92) + "n", chr(10))
+HEADLESS_JWT_ACCESS_TOKEN_EXPIRES_IN = env.int("JWT_ACCESS_TOKEN_LIFETIME_MINUTES", default=15) * 60
+HEADLESS_JWT_REFRESH_TOKEN_EXPIRES_IN = env.int("JWT_REFRESH_TOKEN_LIFETIME_DAYS", default=30) * 86400
+HEADLESS_JWT_ROTATE_REFRESH_TOKEN = True
+HEADLESS_JWT_STATEFUL_VALIDATION_ENABLED = True
+HEADLESS_FRONTEND_URLS = {
+    "account_confirm_email": env("FRONTEND_URL", default="http://localhost:3000") + "/account/verify-email/{key}",
+    "account_reset_password": env("FRONTEND_URL", default="http://localhost:3000") + "/account/password/reset",
+    "account_reset_password_from_key": env("FRONTEND_URL", default="http://localhost:3000")
+    + "/account/password/reset/key/{key}",
+    "account_signup": env("FRONTEND_URL", default="http://localhost:3000") + "/account/signup",
+}
+LOGIN_URL = "/accounts/login/"
+ADMIN_REQUIRE_MFA = env.bool("ADMIN_REQUIRE_MFA", default=True)
+
+# Per-IP rates for allauth auth endpoints (enforced by api.v1.throttles.AuthEndpointThrottleMiddleware)
+AUTH_THROTTLE_RATES = {
+    "login": "10/minute",
+    "signup": "10/hour",
+    "password_reset": "5/hour",
+    "mfa": "20/minute",
 }
 
 # DRF Spectacular

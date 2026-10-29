@@ -1,31 +1,29 @@
 import rules
+from django.contrib.auth.models import AnonymousUser
+
+from apps.accounts.models import User
+from apps.households.models import Household, Membership
+
+
+def _role_in(user: User | AnonymousUser, household: Household | None, roles: set[str]) -> bool:
+    if household is None or not user.is_authenticated:
+        return False
+    return Membership.objects.filter(user=user, household=household, role__in=roles).exists()
 
 
 @rules.predicate
-def is_member(user, household):
-    from apps.households.models import Membership
-
-    return Membership.objects.filter(user=user, household=household).exists()
+def is_member(user: User, household: Household | None) -> bool:
+    return _role_in(user, household, set(Membership.Role.values))
 
 
 @rules.predicate
-def is_owner(user, household):
-    from apps.households.models import Membership
-
-    return Membership.objects.filter(
-        user=user, household=household, role=Membership.Role.OWNER
-    ).exists()
+def is_owner(user: User, household: Household | None) -> bool:
+    return _role_in(user, household, {Membership.Role.OWNER})
 
 
 @rules.predicate
-def is_editor_or_owner(user, household):
-    from apps.households.models import Membership
-
-    return Membership.objects.filter(
-        user=user,
-        household=household,
-        role__in=[Membership.Role.OWNER, Membership.Role.EDITOR],
-    ).exists()
+def is_editor_or_owner(user: User, household: Household | None) -> bool:
+    return _role_in(user, household, {Membership.Role.OWNER, Membership.Role.EDITOR})
 
 
 rules.add_perm("households.view_household", is_member)

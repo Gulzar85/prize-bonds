@@ -9,8 +9,7 @@ dependencies = [
     "drf-spectacular==0.30.0",
     "django-filter==26.2",
     "django-cors-headers==4.9.0",
-    "django-allauth[mfa]==65.21.0",
-    "djangorestframework-simplejwt==5.5.1",
+    "django-allauth[mfa,headless]==65.21.0",
     "argon2-cffi==25.1.0",
     "django-axes==8.3.1",
     "rules==3.5",
@@ -25,6 +24,7 @@ dependencies = [
     "django-auditlog==3.4.1",
     "whitenoise==6.12.0",
     "gunicorn==26.2.0",
+    "django-stubs-ext==6.1.2",
 ]
 
 [dependency-groups]
@@ -47,7 +47,7 @@ default-groups = ["dev"]
 override-dependencies = ["django==6.1.2"]
 
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py314"
 extend-exclude = ["migrations"]
 
@@ -56,16 +56,30 @@ select = ["E", "F", "I", "B", "UP", "DJ", "S"]
 ignore = ["S101"]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S105", "S106"]
+"config/settings/*" = ["F403", "F405", "E402", "S105"]
+"tests/*" = ["S105", "S106", "E501"]
 
 [tool.mypy]
 python_version = "3.14"
 plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
-exclude = ["migrations/"]
+exclude = ["migrations/", "apps/draws/", "apps/draws_temp/"]
 
 [[tool.mypy.overrides]]
 module = ["apps.*", "api.*"]
 strict = true
+
+[[tool.mypy.overrides]]
+module = ["allauth.*", "axes.*", "auditlog.*", "django_celery_beat.*", "rules.*", "health_check.*", "factory.*", "environ.*", "pyotp.*", "structlog.*"]
+ignore_missing_imports = true
+
+# django-rules and celery are untyped; the draws scaffold is replaced in Phase 1.
+[[tool.mypy.overrides]]
+module = ["apps.households.rules", "apps.core.tasks", "apps.draws.*", "apps.draws_temp.*"]
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = ["celery.*"]
+ignore_missing_imports = true
 
 [tool.django-stubs]
 django_settings_module = "config.settings.test"

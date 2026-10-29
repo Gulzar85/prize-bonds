@@ -1,22 +1,21 @@
 from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
-from health_check.views import HealthCheckView
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from health_check.views import HealthCheckView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("accounts/", include("allauth.urls")),
     path("api/v1/", include("api.v1.urls")),
     path("health/live/", HealthCheckView.as_view(checks=[]), name="health-live"),
     path(
         "health/ready/",
-        HealthCheckView.as_view(
-            checks=settings.HEALTH_READY_CHECKS
-        ),
+        HealthCheckView.as_view(checks=settings.HEALTH_READY_CHECKS),
         name="health-ready",
     ),
 ]
