@@ -202,10 +202,14 @@ class Fetcher:
             body.extend(chunk)
             if len(body) > self.config.max_bytes:
                 raise FileTooLarge(f"Download exceeds {self.config.max_bytes} bytes")
-        # Rebuild a fully read response so callers can use .content after the stream is closed.
-        return httpx.Response(
-            response.status_code, headers=response.headers, content=bytes(body), request=response.request
-        )
+        # Rebuild a fully read response so callers can use .content after the stream is closed. The body is already
+        # decoded, so the encoding headers must go or httpx would decompress it a second time (the site gzips .txt).
+        headers = [
+            (k, v)
+            for k, v in response.headers.multi_items()
+            if k.lower() not in ("content-encoding", "content-length", "transfer-encoding")
+        ]
+        return httpx.Response(response.status_code, headers=headers, content=bytes(body), request=response.request)
 
     # -- public API ------------------------------------------------------------
 

@@ -7,6 +7,7 @@ import datetime
 import logging
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from typing import Any
 from urllib.parse import urlparse
 
 from django.conf import settings
@@ -52,7 +53,7 @@ class CrawlStats:
     undated_links: int = 0
     errors: list[str] = field(default_factory=list)
     #: dry runs only: one row per file with the finding codes, nothing is written
-    dry_rows: list[dict[str, object]] = field(default_factory=list)
+    dry_rows: list[dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
@@ -65,10 +66,10 @@ def _known_pages() -> dict[str, str]:
     return {urlparse(d.source_page_url).path.rstrip("/"): d.slug for d in Denomination.objects.all()}
 
 
-def dry_run_link(fetcher: Fetcher, link: DiscoveredLink, denomination: Denomination) -> dict[str, object]:
+def dry_run_link(fetcher: Fetcher, link: DiscoveredLink, denomination: Denomination) -> dict[str, Any]:
     """Download, extract, parse and validate one file without touching the database."""
     assert link.parsed_date is not None
-    row: dict[str, object] = {"denomination": denomination.slug, "date": link.parsed_date.isoformat(), "ext": link.ext}
+    row: dict[str, Any] = {"denomination": denomination.slug, "date": link.parsed_date.isoformat(), "ext": link.ext}
     fetched = fetcher.get_file(link.url, link.ext)
     if not hasattr(fetched, "content"):
         row["status"] = "unchanged"

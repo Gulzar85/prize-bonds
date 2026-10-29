@@ -66,8 +66,8 @@ class Command(BaseCommand):
             return
 
         self.stdout.write(
-            f"\nPages fetched: {stats.pages_fetched}  new files: {stats.files_new}  unchanged: {stats.files_unchanged}  "
-            f"failed: {stats.files_failed}  undated links: {stats.undated_links}"
+            f"\nPages fetched: {stats.pages_fetched}  new files: {stats.files_new}  "
+            f"unchanged: {stats.files_unchanged}  failed: {stats.files_failed}  undated links: {stats.undated_links}"
         )
         for error in stats.errors:
             self.stderr.write(f"  ! {error}")
@@ -84,8 +84,8 @@ class Command(BaseCommand):
         statuses = collections.Counter(str(row["status"]) for row in stats.dry_rows)
         codes: collections.Counter[str] = collections.Counter()
         for row in stats.dry_rows:
-            codes.update(row.get("errors", []))  # type: ignore[arg-type]
-            codes.update(row.get("warnings", []))  # type: ignore[arg-type]
+            codes.update(row.get("errors", []))
+            codes.update(row.get("warnings", []))
         self.stdout.write(f"\nDry run: {len(stats.dry_rows)} files checked, nothing written.")
         for status, count in sorted(statuses.items()):
             self.stdout.write(f"  {status:<12}{count}")

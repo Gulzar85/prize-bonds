@@ -247,6 +247,23 @@ def test_404_is_a_failure_not_a_retry(router, clock):
     assert route.call_count == 1
 
 
+def test_a_gzip_encoded_response_is_decoded_exactly_once(router, clock):
+    """The real site gzips its .txt files; decoding twice once crashed the first live backfill."""
+    import gzip
+
+    body = b"107th DRAW OF Rs.200/- " * 10
+    router.get(FILE_URL).mock(
+        return_value=httpx.Response(
+            200,
+            content=gzip.compress(body),
+            headers={"content-type": "text/plain", "content-encoding": "gzip"},
+        )
+    )
+    result = make(clock).get_file(FILE_URL, "txt")
+    assert result.content == body
+    assert result.sha256 == hashlib.sha256(body).hexdigest()
+
+
 # --- pages --------------------------------------------------------------------------------------------------------------
 
 
