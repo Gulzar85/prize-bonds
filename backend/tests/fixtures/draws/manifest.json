@@ -1127,9 +1127,10 @@
      {
       "rank": 1,
       "amount_pkr": 1500000,
-      "announced_count": 1,
+      "announced_count": null,
       "first": "347425",
-      "last": "347425"
+      "last": "347425",
+      "note": "the file states no count for the first prize"
      },
      {
       "rank": 2,
