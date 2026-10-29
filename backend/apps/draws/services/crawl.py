@@ -192,7 +192,9 @@ def _crawl_denomination(
             if dry_run:
                 stats.dry_rows.append(dry_run_link(fetcher, link, denomination))
                 if progress:
-                    progress(f"{denomination.slug} {draw_date}: {stats.dry_rows[-1]['status']}")
+                    row = stats.dry_rows[-1]
+                    detail = ",".join([*row.get("errors", []), *row.get("warnings", [])])
+                    progress(f"{denomination.slug} {draw_date}: {row['status']} {detail}".rstrip())
                 continue
             outcome = pipeline.ingest_link(fetcher, link, denomination)
         except FetchError as exc:  # dry runs call the fetcher directly

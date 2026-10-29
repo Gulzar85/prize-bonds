@@ -59,12 +59,85 @@ def test_the_hand_read_set_covers_every_denomination():
 # --- behaviour on real files -------------------------------------------------------------------------------------------
 
 
-def test_every_txt_fixture_parses_without_unrecognised_lines_and_with_three_tiers():
-    for path in sorted(FIXTURES.glob("*/*.txt")):
-        result = parse(extract(path.read_bytes(), "txt").text)
-        assert [t.rank for t in result.tiers] == [1, 2, 3], path.name
-        assert not [w for w in result.warnings if w.code == "unrecognised_lines"], path.name
-        assert result.tier(3).numbers, path.name
+GAP = "layout-gap-found-by-live-dry-run"
+SURVEY_TXT = [e for e in MANIFEST if e["file"].endswith(".txt") and GAP not in e["selected_because"]]
+LAYOUT_GAP_TXT = [e for e in MANIFEST if GAP in e["selected_because"]]
+
+
+def _parse_entry(entry):
+    path = FIXTURES / entry["file"].removeprefix("tests/fixtures/draws/")
+    return parse(extract(path.read_bytes(), "txt").text)
+
+
+def test_every_surveyed_txt_fixture_parses_without_unrecognised_lines_and_with_three_tiers():
+    assert len(SURVEY_TXT) == 39
+    for entry in SURVEY_TXT:
+        result = _parse_entry(entry)
+        assert [t.rank for t in result.tiers] == [1, 2, 3], entry["file"]
+        assert not [w for w in result.warnings if w.code == "unrecognised_lines"], entry["file"]
+        assert result.tier(3).numbers, entry["file"]
+
+
+def test_layouts_found_by_the_live_dry_run_are_now_understood():
+    """Files the first full dry run could not read: each now yields three tiers with first/second amounts."""
+    assert len(LAYOUT_GAP_TXT) == 8
+    for entry in LAYOUT_GAP_TXT:
+        result = _parse_entry(entry)
+        assert [t.rank for t in result.tiers] == [1, 2, 3], entry["file"]
+        assert result.tier(1).amount_pkr and result.tier(2).amount_pkr, entry["file"]
+
+
+def test_amount_without_rs_and_third_tier_heading_variants():
+    result = parse("20th Draw\nFirst prize Rs. 5/-\n011964\nThird Prize of 300,000/- each\n000277 | 071106\n")
+    assert result.tier(3).amount_pkr == 300000
+    bare = parse("52nd Draw\nFirst Prize of Rs. 700,000/-\n171732\nPrizes of Rs. 1,000/- each\n000177 | 042172\n")
+    assert (bare.tier(3).amount_pkr, bare.tier(3).numbers) == (1000, ("000177", "042172"))
+
+
+def test_numbers_before_the_word_price_and_amounts_without_rs():
+    text = "100TH DRAW\n871778 First price 1,500,000\n249962 Second price 500,000\n448780 Second price 500,000\n"
+    result = parse(text)
+    assert result.tier(1).numbers == ("871778",) and result.tier(1).amount_pkr == 1_500_000
+    assert result.tier(2).numbers == ("249962", "448780") and result.tier(2).amount_pkr == 500_000
+
+
+def test_count_line_in_the_header_and_a_third_tier_without_heading():
+    rows = "\n".join("\t".join(f"{r * 6 + c + 1:06d}" for c in range(6)) for r in range(3))
+    text = (
+        "100TH DRAW OF RS.750/- HELD AT FAISALABAD ON 15TH OCTOBER, 2024 - 1696 PRIZES OF RS.9,300/- EACH\n"
+        "871778 First price 1,500,000\n249962 Second price 500,000\n" + rows + "\n"
+    )
+    result = parse(text)
+    assert result.tier(3).amount_pkr == 9300 and result.tier(3).announced_count == 1696
+    assert len(result.tier(3).numbers) == 18 and result.tier(2).numbers == ("249962",)
+    assert "third_tier_without_heading" in {w.code for w in result.warnings}
+    assert result.draw_date == datetime.date(2024, 10, 15)
+
+
+def test_digits_typed_with_spaces_are_joined_and_flagged():
+    result = parse("15th DRAW\nFirst Prize of Rs. 80,000,000/-\n9 9 8 0 2 9\nSecond Prize of Rs. 1/-\n213322 457930\n")
+    assert result.tier(1).numbers == ("998029",)
+    assert "spaced_digits_joined" in {w.code for w in result.warnings}
+
+
+@pytest.mark.parametrize(
+    ("text", "expected"),
+    [
+        ("held on 10th Dec, 2020 at X", datetime.date(2020, 12, 10)),
+        ("held today the 15th December, 2023 (Friday)", datetime.date(2023, 12, 15)),
+        ("held on 15th Sept 2024", datetime.date(2024, 9, 15)),
+        ("held on 1 Jan. 2025", datetime.date(2025, 1, 1)),
+        ("HELD ON 31-12-2025", datetime.date(2025, 12, 31)),
+    ],
+)
+def test_date_formats(text, expected):
+    assert parse(f"5th DRAW OF Rs.200/- {text}\nFirst Prize of Rs.5\n111111\n").draw_date == expected
+
+
+def test_denomination_with_and_without_the_rupee_slash():
+    spelled = parse("Draw Result of Rs.25,000 Denomination Premium 20th Draw\nFirst Prize of Rs.5\n111111\n")
+    assert spelled.denomination_value == 25000
+    assert parse("DRAW OF Rs.40000/- Premium\nFirst Prize of Rs.5\n111111\n").denomination_value == 40000
 
 
 def test_four_digit_number_is_kept_as_printed_not_padded():

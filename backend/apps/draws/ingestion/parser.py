@@ -31,11 +31,15 @@ _MONTHS = {
         start=1,
     )
 }
+_MONTH_BY_PREFIX = {name[:3]: number for name, number in _MONTHS.items()}
 _ORDINAL_DRAW = re.compile(r"(\d{1,3})\s*(?:st|nd|rd|th)\s*draw\b", re.I)
 _DRAW_NO = re.compile(r"draw\s*no\.?\s*:?\s*(\d{1,3})", re.I)
 _NUMERIC_DATE = re.compile(r"(?<!\d)(\d{1,2})\s*[-./]\s*(\d{1,2})\s*[-./]\s*(\d{4})(?!\d)")
 _TEXT_DATE = re.compile(
-    r"(?<!\d)(\d{1,2})\s*(?:st|nd|rd|th)?[\s,]*(" + "|".join(_MONTHS) + r")\s*[,.]?\s*(\d{4})(?!\d)", re.I
+    r"(?<!\d)(\d{1,2})\s*(?:st|nd|rd|th)?[\s,]*("
+    + "|".join(sorted([*_MONTHS, *(m[:3] for m in _MONTHS), "sept"], key=len, reverse=True))
+    + r")\b\.?\s*[,.]?\s*(\d{4})(?!\d)",
+    re.I,
 )
 _HELD = re.compile(r"held\s+(?:on|at)", re.I)
 _HELD_BEFORE_DATE = re.compile(r"held\b[^.\n]{0,25}$", re.I)
@@ -43,7 +47,7 @@ _CITY = re.compile(
     r"\bat\s+(?:SBP\s*)?(?:\(?\s*BSC\s*\)?\s*)?([A-Za-z][A-Za-z ]*?)(?=\s+on\b|\s*\d|\s*\(|\s+held\b|\s*$)",
     re.I | re.M,
 )
-_DENOMINATION = re.compile(r"Rs\.?\s*(?:premium\s*)?(\d[\d, ]*\d|\d)\s*/-", re.I)
+_DENOMINATION = re.compile(r"Rs\.?\s*(?:premium\s*)?(\d[\d, ]*\d|\d)\s*(?:/-|denomination)", re.I)
 
 # --- tiers ----------------------------------------------------------------------------------------------------------
 
@@ -52,7 +56,15 @@ _SECOND = re.compile(r"\b(?:2nd|second)\s+p+ri[cz]e", re.I)
 _THIRD = re.compile(r"\b(?:3rd|third)\s+p+ri[cz]e", re.I)
 #: "(2400 Prizes of Rs.1250/- Each)", "2394 Prize(s) of 1250/- Each", "Third Prize of 1696 Prizes of Rs.9,300/- Each"
 _COUNT_OF = re.compile(r"(\d[\d,]*)\s*Prize\(?s?\)?\s+of\s+(?:Rs\.?\s*)?(\d[\d, ]*\d|\d)", re.I)
-_AMOUNT = re.compile(r"Rs\.?\s*(?:Rs\.?\s*)?(\d[\d, ]*\d|\d)", re.I)
+#: "Rs. 750,000", "Rs.Rs.250,000", "of 300,000/-", or a bare "1,500,000" with thousands separators.
+_AMOUNT = re.compile(
+    r"Rs\.?\s*(?:Rs\.?\s*)?(?P<a>\d[\d, ]*\d|\d)"
+    r"|\bof\s+(?P<b>\d[\d, ]*\d)(?=\s*/)"
+    r"|(?<![\d,])(?P<c>\d{1,3}(?:,\d{3})+)(?![\d,])",
+    re.I,
+)
+#: "Prizes of Rs. 1,000/- each" with no "Third" and no count: the third-prize heading in some Student Welfare files.
+_THIRD_BARE = re.compile(r"^\s*prizes?\s+of\b", re.I)
 #: "01 Prize:", "05 Prizes", "(03 Prizes)"; "Prizes of" is the third-tier form handled above.
 _COUNT = re.compile(r"\(?\b(\d{1,5})\s*Prizes?\b(?!\s*of\b)", re.I)
 
@@ -91,6 +103,10 @@ def _to_int(text: str) -> int:
     return int(re.sub(r"[^\d]", "", text))
 
 
+def _amount(match: re.Match[str]) -> int:
+    return _to_int(match["a"] or match["b"] or match["c"])
+
+
 def _safe_date(year: int, month: int, day: int) -> datetime.date | None:
     try:
         return datetime.date(year, month, day)
@@ -105,7 +121,9 @@ def _find_dates(text: str) -> list[tuple[int, datetime.date | None, str]]:
         day, month, year = (int(g) for g in match.groups())
         found.append((match.start(), _safe_date(year, month, day), match[0]))
     for match in _TEXT_DATE.finditer(text):
-        found.append((match.start(), _safe_date(int(match[3]), _MONTHS[match[2].lower()], int(match[1])), match[0]))
+        found.append(
+            (match.start(), _safe_date(int(match[3]), _MONTH_BY_PREFIX[match[2].lower()[:3]], int(match[1])), match[0])
+        )
     return sorted(found, key=lambda item: item[0])
 
 
@@ -168,9 +186,16 @@ def parse(text: str) -> ParseResult:
     seen_ranks: list[int] = []
     unrecognised: list[tuple[int, str]] = []
     current: int | None = None
+    pending_third: tuple[int, int] | None = None  # "N PRIZES OF RS.X" printed in the header, before any tier heading
+    notes: list[Finding] = []
+    spaced_digit_lines: list[int] = []
+    implicit_third_line: int | None = None
 
     for line_no, line in enumerate(lines, start=1):
         cells = re.sub(r"[|\t]+", " ", line).split()
+        if 4 <= len(cells) <= 8 and all(len(c) == 1 and c.isdigit() for c in cells):
+            cells = ["".join(cells)]  # "9 9 8 0 2 9": a number typed with spaces between its digits
+            spaced_digit_lines.append(line_no)
         is_cell_row = bool(cells) and all(_CELL.fullmatch(c) for c in cells)
 
         if summary := _SUMMARY_TIER.search(line):
@@ -184,7 +209,7 @@ def parse(text: str) -> ParseResult:
         count_of = _COUNT_OF.search(line)
         heading_rank = (
             3
-            if (_THIRD.search(line) or count_of)
+            if (_THIRD.search(line) or _THIRD_BARE.match(line) or count_of)
             else 2
             if _SECOND.search(line)
             else 1
@@ -193,6 +218,11 @@ def parse(text: str) -> ParseResult:
         )
         if is_cell_row:
             heading_rank = None
+        if count_of and current is None and not _THIRD.search(line):
+            # The third-prize count and amount sit in the header; the section itself has no heading.
+            pending_third = (_to_int(count_of[1]), _to_int(count_of[2]))
+            header_lines.append(line)
+            continue
 
         if current is None and heading_rank is None:
             header_lines.append(line)
@@ -209,7 +239,7 @@ def parse(text: str) -> ParseResult:
                 stripped = line.replace(count_of[0], " ")
             else:
                 if amount := _AMOUNT.search(line):
-                    amounts[heading_rank] = _to_int(amount[1])
+                    amounts[heading_rank] = _amount(amount)
                 stripped = _AMOUNT.sub(" ", line)
             if heading_rank != 3 or not count_of:
                 if count := _COUNT.search(stripped):
@@ -231,6 +261,11 @@ def parse(text: str) -> ParseResult:
             continue
 
         if is_cell_row:
+            if current in (1, 2) and 3 not in seen_ranks and len(cells) >= 6:
+                # A grid row (more than the 5 numbers a second prize can have) without a third-prize heading.
+                current = 3
+                seen_ranks.append(3)
+                implicit_third_line = line_no
             for cell in cells:
                 if _FILLER.fullmatch(cell):
                     fillers += 1
@@ -252,7 +287,24 @@ def parse(text: str) -> ParseResult:
 
         unrecognised.append((line_no, line[:100]))
 
-    findings: list[Finding] = []
+    if pending_third and 3 in seen_ranks:
+        counts.setdefault(3, pending_third[0])
+        amounts.setdefault(3, pending_third[1])
+    if implicit_third_line is not None:
+        notes.append(
+            _warn(
+                "third_tier_without_heading",
+                "The third-prize grid starts without a heading; it was recognised by its width",
+                line=implicit_third_line,
+            )
+        )
+    if spaced_digit_lines:
+        notes.append(
+            _warn(
+                "spaced_digits_joined", "Numbers typed with spaces between digits were joined", lines=spaced_digit_lines
+            )
+        )
+    findings: list[Finding] = list(notes)
     if unrecognised:
         findings.append(
             _warn(

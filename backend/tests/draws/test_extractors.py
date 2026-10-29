@@ -216,6 +216,6 @@ def test_dispatch_rejects_unknown_extension():
 def test_every_fixture_with_a_text_source_extracts():
     """Smoke test over all committed TXT fixtures: nothing raises and every file yields non-empty text."""
     files = sorted(FIXTURES.glob("*/*.txt"))
-    assert len(files) == 39
+    assert len(files) == 47
     for path in files:
         assert extract(path.read_bytes(), "txt").text.strip(), path.name
