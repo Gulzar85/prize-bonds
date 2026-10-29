@@ -108,9 +108,26 @@ Proposed rule: `announced` is accepted if it equals `third_count` (normal) or `f
 `announced_count_is_total`, WARNING). Neither match = ERROR; absent = WARNING. Because the meaning varies per file,
 never infer it from the draw number alone.
 
-**Suspicious counts (need a human or a second source):** Rs 100 draw 54 (1,144 vs usual 1,199), Rs 750 draw 105
-(1,660 vs 1,696), Premium 40,000 draw 36 (572 vs 660), Premium 25,000 2026-06-10 (600 vs 700), Premium 40,000
-2019-03-11 (1,144 vs stated 660). These could be truncated uploads or real changes; the file alone cannot tell.
+**Correction (written after the parser existed).** An earlier draft of this document listed five "suspicious" counts
+(Rs 100 draw 54, Rs 750 draw 105, Premium 40,000 draw 36, Premium 25,000 2026-06-10, Premium 40,000 2019-03-11). Four of
+them were artefacts of the quick counting script used for the survey, which did not understand `******` fillers or the
+"Third Price" typo; the real parser reads 1,199 / 1,696 / 660 / 700 for them, as expected. The one that stands is
+**Premium 40,000 2019-03-11: 1,144 numbers against 660 announced** (the grid is 13 columns wide and the file looks like a
+different prize structure or a duplicated section), which is reported as `announced_count_mismatch` and `duplicate_number`.
+
+**More facts found while building (all reflected in the code and ADRs 0006-0008):**
+- The official "Part-I" summaries (PDF/DOCX, and some `.txt` that copy them) state, per tier, "N Prizes of Rs.X each, M Prizes
+  in each series" and "T Total Prizes (K Prizes in each series)". K is the **total of all tiers** (2,400 for Rs 200 = 1 + 5 +
+  2,394; 1,203 for Rs 100 = 1 + 3 + 1,199; 707 for Premium 25,000 = 2 + 5 + 700), which settles the announced-count rule.
+- The Rs 100 `.docx` (draw 35) and the Rs 750 `.doc` (draw 97) are **first-page files only**: they hold the first and second
+  prizes but not the third-prize grid. They cannot be published without a manual upload of the rest.
+- The Premium 25,000 draw of 2026-03-10 has a PDF with a text layer for page 1 only (garbled: `700PrizeosfRs.300,000/E-ach`);
+  its TXT twin is the usable source.
+- The server **gzips `.txt` responses** and the TLS chain is incomplete (ADR-0006); both broke the first live run.
+- Eight more layouts/typos appeared in the first full dry run: amounts without "Rs.", "Prizes of Rs. 1,000/- each" as the
+  third-prize heading, numbers typed with spaces (`9 9 8 0 2 9`), abbreviated months (`10th Dec, 2020`), a count printed in the
+  header with a headingless third tier, `Rs.25,000 Denomination` with no `/-`, OCR-looking files (`9zth DRAW`, `RS.I500`),
+  and a third prize with no amount at all (Rs 750 draw 104).
 
 ## 7. Layout facts that differ from the brief
 
@@ -134,10 +151,11 @@ as an optional manual spot-check link for reviewers; no scraper will be built.
 
 ## 9. Fixture set
 
-`backend/tests/fixtures/draws/` holds **55 files (21 MB)**: latest 3 dates per denomination, oldest per denomination,
-all 16 non-TXT files, both revisions, all date-mismatch and multi-file cases. `manifest.json` has source URL, SHA-256,
+`backend/tests/fixtures/draws/` holds **63 files (21 MB)**: latest 3 dates per denomination, oldest per denomination,
+all 16 non-TXT files, both revisions, all date-mismatch and multi-file cases, plus 8 TXT files added after the first live dry run
+because they exposed parser gaps (`layout-gap-found-by-live-dry-run`). `manifest.json` has source URL, SHA-256,
 size, content type, `ETag`, `Last-Modified`, link text and selection reasons per file.
 
 **Hand verification status:** expected values (draw number, date, city, tier amounts, announced counts, first/last
-numbers) were read by eye for **6 of 55** files, one per denomination (`verification: hand-read`). The other 49 are
+numbers) were read by eye for **6 of 63** files, one per denomination (`verification: hand-read`). The other 57 are
 marked `pending-hand-read` and must be read before golden tests may assert on them.
