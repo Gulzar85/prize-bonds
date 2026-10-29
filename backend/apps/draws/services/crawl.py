@@ -5,6 +5,7 @@ Used by the Celery tasks and the ``backfill_draws`` command alike, so both run t
 
 import datetime
 import logging
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from urllib.parse import urlparse
 
@@ -101,6 +102,7 @@ def run_crawl(
     only_date: datetime.date | None = None,
     dry_run: bool = False,
     check_index: bool = True,
+    progress: Callable[[str], None] | None = None,
 ) -> CrawlResult:
     stats = CrawlStats()
     run = None
@@ -127,7 +129,7 @@ def run_crawl(
             stats.errors.append(f"index: {exc}")
 
     for denomination in denominations:
-        _crawl_denomination(fetcher, denomination, stats, since_year, only_date, dry_run)
+        _crawl_denomination(fetcher, denomination, stats, since_year, only_date, dry_run, progress)
 
     if run is not None:
         run.finished_at = timezone.now()
@@ -156,6 +158,7 @@ def _crawl_denomination(
     since_year: int | None,
     only_date: datetime.date | None,
     dry_run: bool,
+    progress: Callable[[str], None] | None = None,
 ) -> None:
     try:
         html = fetcher.get_page(denomination.source_page_url)
@@ -187,12 +190,16 @@ def _crawl_denomination(
         try:
             if dry_run:
                 stats.dry_rows.append(dry_run_link(fetcher, link, denomination))
+                if progress:
+                    progress(f"{denomination.slug} {draw_date}: {stats.dry_rows[-1]['status']}")
                 continue
             outcome = pipeline.ingest_link(fetcher, link, denomination)
         except FetchError as exc:  # dry runs call the fetcher directly
             stats.files_failed += 1
             stats.errors.append(f"{denomination.slug} {draw_date}: {exc}")
             continue
+        if progress:
+            progress(f"{denomination.slug} {draw_date}: {outcome.outcome.lower()}")
         if outcome.outcome == pipeline.NEW_REVISION:
             stats.files_new += 1
         elif outcome.outcome == pipeline.UNCHANGED:
