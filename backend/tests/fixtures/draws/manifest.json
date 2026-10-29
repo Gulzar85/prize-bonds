@@ -1,0 +1,1236 @@
+{
+ "survey_date": "2026-10-29",
+ "note": "expected values were read by a person from the file, not produced by the parser; entries with verification=pending-hand-read are included only as raw samples until they are read",
+ "fixtures": [
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-25000/Draw-Result-21st-Draw-of-Rs.25000-Premium-Prize-Bond-held-on-10-03-2026-at-SBP-BSC-Multan.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/03/Draw-Result-21st-Draw-of-Rs.25000-Premium-Prize-Bond-held-on-10-03-2026-at-SBP-BSC-Multan.pdf",
+   "sha256": "94d393b2d7b07eb939842b75388f2e9e77f44820891105d64680797178914d5c",
+   "size_bytes": 1713003,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Tue, 10 Mar 2026 12:03:57 GMT",
+   "link_text": "10-03-2026",
+   "year_heading": "2026",
+   "link_date": "2026-03-10",
+   "denomination_page": "premium-prize-bond-rs-25000",
+   "selected_because": [
+    "latest3",
+    "multiple-files-same-draw",
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-25000/March-DRAW-RESULT-OF-Rs.25000-DENOMINATI.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/03/March-DRAW-RESULT-OF-Rs.25000-DENOMINATI.txt",
+   "sha256": "803f97cf35a0bde1f86926ba108e462cae62a43fe72e3e591c5da7cbd2314352",
+   "size_bytes": 5505,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 10 Mar 2026 12:20:43 GMT",
+   "link_text": "10-03-2026",
+   "year_heading": "2026",
+   "link_date": "2026-03-10",
+   "denomination_page": "premium-prize-bond-rs-25000",
+   "selected_because": [
+    "latest3",
+    "multiple-files-same-draw"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-25000/10-06-2026-Rs-25000.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/06/10-06-2026-Rs-25000.txt",
+   "sha256": "343d67fa6b0b4416ccee727d5dd0a258461027412111c5da381ef5adc1147bd1",
+   "size_bytes": 5442,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Wed, 10 Jun 2026 13:59:46 GMT",
+   "link_text": "10-06-2026",
+   "year_heading": "2026",
+   "link_date": "2026-06-10",
+   "denomination_page": "premium-prize-bond-rs-25000",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-25000/25000_100926-1.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/09/25000_100926-1.txt",
+   "sha256": "f5efef72b2a717674fd25009fe42a6778dfffd6302aa585f8e4aafea9ce891ed",
+   "size_bytes": 5566,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Mon, 14 Sep 2026 08:58:02 GMT",
+   "link_text": "10-09-2026",
+   "year_heading": "2026",
+   "link_date": "2026-09-10",
+   "denomination_page": "premium-prize-bond-rs-25000",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": {
+    "draw_number": 23,
+    "draw_date": "2026-09-10",
+    "city": "SBP BSC QUETTA",
+    "tiers": [
+     {
+      "rank": 1,
+      "amount_pkr": 30000000,
+      "announced_count": 2,
+      "numbers": [
+       "151975",
+       "154149"
+      ],
+      "note": "more than one first-prize number"
+     },
+     {
+      "rank": 2,
+      "amount_pkr": 10000000,
+      "announced_count": 5,
+      "numbers": [
+       "322522",
+       "428227",
+       "504842",
+       "579060",
+       "647138"
+      ]
+     },
+     {
+      "rank": 3,
+      "amount_pkr": 300000,
+      "announced_count": 700,
+      "grid_first_in_reading_order": "001462",
+      "grid_last_real_in_reading_order": "938192",
+      "filler_marker": "xxxxxx (lowercase)"
+     }
+    ],
+    "layout": "L-PREMIUM-13COL"
+   },
+   "verification": "hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-25000/10-03-2021-Rs-25000-Premium.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/10-03-2021-Rs-25000-Premium.txt",
+   "sha256": "44aa26a85423d9d0758aabb237e6ecb333a8973f48f2f30f336afc56de0f1d1c",
+   "size_bytes": 5805,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Wed, 13 Nov 2024 11:33:29 GMT",
+   "link_text": "10-03-2021",
+   "year_heading": "2021",
+   "link_date": "2021-03-10",
+   "denomination_page": "premium-prize-bond-rs-25000",
+   "selected_because": [
+    "oldest"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-25000/PB-draw-of-25000-1.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/PB-draw-of-25000-1.pdf",
+   "sha256": "8a484860764815123b4a1b571b45fe1ef551ab2b294640eba8096352e7a9508b",
+   "size_bytes": 875000,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Wed, 13 Nov 2024 11:35:51 GMT",
+   "link_text": "11-12-2023",
+   "year_heading": "2023",
+   "link_date": "2023-12-11",
+   "denomination_page": "premium-prize-bond-rs-25000",
+   "selected_because": [
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-40000/March-DRAW-RESULT-OF-RS.-40000-DENOMINA.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/03/March-DRAW-RESULT-OF-RS.-40000-DENOMINA.txt",
+   "sha256": "a0473b9b2d89f3090edca4b876d35e38e45b01a21bd8e82871d5fc440334c540",
+   "size_bytes": 5188,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 10 Mar 2026 11:14:15 GMT",
+   "link_text": "10-03-2026",
+   "year_heading": "2026",
+   "link_date": "2026-03-10",
+   "denomination_page": "premium-prize-bond-rs-40000",
+   "selected_because": [
+    "latest3",
+    "multiple-files-same-draw"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-40000/CamScanner-10-03-2026-16.21.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/03/CamScanner-10-03-2026-16.21.pdf",
+   "sha256": "0a3cb54a22ea4ecca66c889c36e3ca33875b407e9324025bbabd2f13a73698b2",
+   "size_bytes": 1879064,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Tue, 10 Mar 2026 12:35:27 GMT",
+   "link_text": "10-03-2026",
+   "year_heading": "2026",
+   "link_date": "2026-03-10",
+   "denomination_page": "premium-prize-bond-rs-40000",
+   "selected_because": [
+    "latest3",
+    "multiple-files-same-draw",
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-40000/10-06-2026-Rs.40000.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/06/10-06-2026-Rs.40000.txt",
+   "sha256": "a8d29051fde58689b516358d693069b42bb129a224493486ef17f0cd76b69f74",
+   "size_bytes": 5371,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Wed, 10 Jun 2026 15:05:01 GMT",
+   "link_text": "10-06-2026",
+   "year_heading": "2026",
+   "link_date": "2026-06-10",
+   "denomination_page": "premium-prize-bond-rs-40000",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-40000/40000_100926.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/09/40000_100926.txt",
+   "sha256": "4f4fa084b5c66af041058ef21b1c0b24127202aa00387c87d7486da8efc76bf7",
+   "size_bytes": 5235,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Mon, 14 Sep 2026 10:34:41 GMT",
+   "link_text": "10-09-2026",
+   "year_heading": "2026",
+   "link_date": "2026-09-10",
+   "denomination_page": "premium-prize-bond-rs-40000",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": {
+    "draw_number": 38,
+    "draw_date": "2026-09-10",
+    "city": "SIALKOT",
+    "tiers": [
+     {
+      "rank": 1,
+      "amount_pkr": 80000000,
+      "announced_count": 1,
+      "first": "308105",
+      "last": "308105"
+     },
+     {
+      "rank": 2,
+      "amount_pkr": 30000000,
+      "announced_count": 3,
+      "numbers": [
+       "222525",
+       "282397",
+       "765216"
+      ]
+     },
+     {
+      "rank": 3,
+      "amount_pkr": 500000,
+      "announced_count": 660,
+      "grid_first_in_reading_order": "001363",
+      "grid_last_real_in_reading_order": "953633",
+      "filler_cells": 16
+     }
+    ],
+    "layout": "L-PREMIUM-13COL"
+   },
+   "verification": "hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-40000/11-03-2019-Rs-40000-premium.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/11-03-2019-Rs-40000-premium.txt",
+   "sha256": "5133a227d53c9fdcd76f23a53c3a6c0d5aba700472de08ccaf9a881c6cfb05b8",
+   "size_bytes": 8866,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Wed, 13 Nov 2024 08:45:46 GMT",
+   "link_text": "11-03-2019",
+   "year_heading": "2019",
+   "link_date": "2019-03-11",
+   "denomination_page": "premium-prize-bond-rs-40000",
+   "selected_because": [
+    "oldest"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-40000/Rs-40000-10-12-2025.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2025/12/Rs-40000-10-12-2025.txt",
+   "sha256": "329d668ac25e3df664769e6678f5d4e7efe773d34b799d731500528e2d156a64",
+   "size_bytes": 5091,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Wed, 10 Dec 2025 13:26:12 GMT",
+   "link_text": "10-12-2025",
+   "year_heading": "2025",
+   "link_date": "2025-12-10",
+   "denomination_page": "premium-prize-bond-rs-40000",
+   "selected_because": [
+    "filename-date-mismatch"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-40000/10-06-2024-Rs-40000-Premium-3.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/10-06-2024-Rs-40000-Premium-3.txt",
+   "sha256": "3ceb063bef697bcd5008a7f7d242d1c6889f02c9d160a32dd2f5d6c447a2b035",
+   "size_bytes": 5516,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Wed, 13 Nov 2024 08:54:13 GMT",
+   "link_text": "11-06-2024",
+   "year_heading": "2024",
+   "link_date": "2024-06-11",
+   "denomination_page": "premium-prize-bond-rs-40000",
+   "selected_because": [
+    "filename-date-mismatch"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/premium-prize-bond-rs-40000/Draw-List-Rs.-40000-PPB-27th-Draw-Karachi_compressed-1_compressed.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/Draw-List-Rs.-40000-PPB-27th-Draw-Karachi_compressed-1_compressed.pdf",
+   "sha256": "4b85ca1daac1178a5e7d44c9fb5c717c20dfbab97f9fae84e9eddd57acfca2da",
+   "size_bytes": 518674,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Wed, 13 Nov 2024 08:53:58 GMT",
+   "link_text": "12-12-2023",
+   "year_heading": "2023",
+   "link_date": "2023-12-12",
+   "denomination_page": "premium-prize-bond-rs-40000",
+   "selected_because": [
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/Rs-100-53-Draw-16-02-2026-Karachi.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/02/Rs-100-53-Draw-16-02-2026-Karachi.pdf",
+   "sha256": "75072e778cf34b5259c15b2fd4d4e0697ee0c65442148b400adbe0c4dd6e7810",
+   "size_bytes": 1581015,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Mon, 16 Feb 2026 13:45:27 GMT",
+   "link_text": "16-02-2026",
+   "year_heading": "2026",
+   "link_date": "2026-02-16",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "latest3",
+    "multiple-files-same-draw",
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/53-Draw-Result-of-Rs.-100-Denominatio.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/02/53-Draw-Result-of-Rs.-100-Denominatio.txt",
+   "sha256": "ec818c432192b3e716c82ec5a5dc111bc4d09a1d3a598525ee73d566d9dec41a",
+   "size_bytes": 8948,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Mon, 16 Feb 2026 14:44:08 GMT",
+   "link_text": "16-02-2026  (Txt File)",
+   "year_heading": "2026",
+   "link_date": "2026-02-16",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "format-suffix-link-text",
+    "latest3",
+    "multiple-files-same-draw"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/Rs-100-Prize-Bond-Draw-May-2026.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/05/Rs-100-Prize-Bond-Draw-May-2026.txt",
+   "sha256": "74939de40287fb036f05c551b0296755bc6ce5afe4040916250322500c9afa0a",
+   "size_bytes": 9228,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Fri, 15 May 2026 13:58:02 GMT",
+   "link_text": "15-05-2026",
+   "year_heading": "2026",
+   "link_date": "2026-05-15",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/100_170826.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/08/100_170826.txt",
+   "sha256": "fa80761efee6deff85338d09d467b0969848cc14e8d54f8fa871e6475a25bcd4",
+   "size_bytes": 8828,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Thu, 27 Aug 2026 10:24:09 GMT",
+   "link_text": "100_170826_Txt",
+   "year_heading": "2026",
+   "link_date": "2026-08-17",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "latest3",
+    "non-date-link-text"
+   ],
+   "expected": {
+    "draw_number": 55,
+    "draw_date": null,
+    "draw_date_note": "absent from file; link text is '100_170826_Txt' (no date); date 2026-08-17 only recoverable from file name",
+    "city": null,
+    "tiers": [
+     {
+      "rank": 1,
+      "amount_pkr": 700000,
+      "announced_count": null,
+      "first": "732900",
+      "last": "732900"
+     },
+     {
+      "rank": 2,
+      "amount_pkr": 200000,
+      "announced_count": null,
+      "numbers": [
+       "252196",
+       "427125",
+       "875106"
+      ]
+     },
+     {
+      "rank": 3,
+      "amount_pkr": 1000,
+      "announced_count": 1199,
+      "grid_first_in_reading_order": "000505",
+      "grid_last_real_in_reading_order": "961288",
+      "filler_marker": "xxxxxx (lowercase)",
+      "page_markers": "Page No.n"
+     }
+    ],
+    "layout": "L-100-STUDENT-WELFARE"
+   },
+   "verification": "hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/15-02-2019-Rs-100.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/15-02-2019-Rs-100.txt",
+   "sha256": "f181e54fe5af66e76083b425947b288e3027b9362a18f1eac008e6f5b12d18f5",
+   "size_bytes": 12907,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 05:03:59 GMT",
+   "link_text": "15-02-2019",
+   "year_heading": "2019",
+   "link_date": "2019-02-15",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "oldest"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/DRAW-RESULT-OF-RS.-100-DENOMINATIO.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2025/08/DRAW-RESULT-OF-RS.-100-DENOMINATIO.txt",
+   "sha256": "0792f3d3c1c6163c326df16b5ac998128ef49b899aa4b50f68f9119f7f0c8b07",
+   "size_bytes": 8742,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Fri, 15 Aug 2025 15:14:23 GMT",
+   "link_text": "15-08-2025 (text)",
+   "year_heading": "2025",
+   "link_date": "2025-08-15",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "format-suffix-link-text",
+    "multiple-files-same-draw"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/Draw-Result.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2025/08/Draw-Result.pdf",
+   "sha256": "82ee09dfec6d6a1b489f9ebb500610651b279fd562f23afa2398df72fd6f745e",
+   "size_bytes": 1367998,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Fri, 15 Aug 2025 14:16:51 GMT",
+   "link_text": "15-08-2025 (pdf)",
+   "year_heading": "2025",
+   "link_date": "2025-08-15",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "format-suffix-link-text",
+    "multiple-files-same-draw",
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/15-11-2014-Rs-100.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/15-11-2014-Rs-100.txt",
+   "sha256": "e4191fe273574b61d8f33da9194d5060339a7e895d7e6aa91419e613c2a98f61",
+   "size_bytes": 9734,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Fri, 15 Nov 2024 20:21:51 GMT",
+   "link_text": "15-11-2024",
+   "year_heading": "2024",
+   "link_date": "2024-11-15",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "filename-date-mismatch"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/35th-draw-of-100-Student-Welfare-Bonds.docx",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/35th-draw-of-100-Student-Welfare-Bonds.docx",
+   "sha256": "ada1d5ebd7bb0fa57141d50d861481abb08a593ff699b67867887e59fc0074cf",
+   "size_bytes": 75669,
+   "content_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 05:24:01 GMT",
+   "link_text": "15-08-2021",
+   "year_heading": "2021",
+   "link_date": "2021-08-15",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/15-11-2021-Rs-100.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/15-11-2021-Rs-100.txt",
+   "sha256": "51062e67540ff1f6e89abeaff913a6298232a1259c50166594a9ae724bebcf13",
+   "size_bytes": 9160,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 05:24:30 GMT",
+   "link_text": "18-11-2021",
+   "year_heading": "2021",
+   "link_date": "2021-11-18",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "filename-date-mismatch"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/Draw-Result-SWPB-Rs-100_compressed.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/Draw-Result-SWPB-Rs-100_compressed.pdf",
+   "sha256": "5d3e32c86d8431971f0dbbc7027b11db028fbf9c85ad92e08fcebd5c7abf2a30",
+   "size_bytes": 590663,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 05:17:50 GMT",
+   "link_text": "15-08-2020",
+   "year_heading": "2020",
+   "link_date": "2020-08-15",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/Rs.100-15-05-2019.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/Rs.100-15-05-2019.txt",
+   "sha256": "e6c64e8d09700a6901c1e844a439c9d94820d317da45080d07851ca803e4555a",
+   "size_bytes": 9137,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 05:04:21 GMT",
+   "link_text": "15-05-2019",
+   "year_heading": "2019",
+   "link_date": "2019-05-15",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "filename-date-mismatch"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-100-prize-bond-draw/Scan-copy-of-2th-Draw-result-of-Rs.-100-Denom-Student-Welfare-PB_compressed.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/Scan-copy-of-2th-Draw-result-of-Rs.-100-Denom-Student-Welfare-PB_compressed.pdf",
+   "sha256": "44fa92fbd1cf219de1feeeca7dcd03d3fbc6861b74eb877278c157b18613e362",
+   "size_bytes": 608747,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 05:15:55 GMT",
+   "link_text": "15-08-2019",
+   "year_heading": "2019",
+   "link_date": "2019-08-15",
+   "denomination_page": "rs-100-prize-bond-draw",
+   "selected_because": [
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/105-DRAW-RESULT-OF-RS.1500-DENOMINATIO.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/02/105-DRAW-RESULT-OF-RS.1500-DENOMINATIO.txt",
+   "sha256": "3d5f61a6bc368938d8d3e671aa156c955a68e6625b55104f5a0a3da75545ef8e",
+   "size_bytes": 12499,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Mon, 16 Feb 2026 12:55:20 GMT",
+   "link_text": "16-02-2026 (txt file)",
+   "year_heading": "2026",
+   "link_date": "2026-02-16",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "format-suffix-link-text",
+    "latest3",
+    "multiple-files-same-draw"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/Rs-1500-105-Draw.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/02/Rs-1500-105-Draw.pdf",
+   "sha256": "6d091b13c637126423e2ac5e74efa73071cc5ff6b6b4dad397bf1b9ab191d32f",
+   "size_bytes": 2021259,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Mon, 16 Feb 2026 16:59:04 GMT",
+   "link_text": "16-02-2026 (pdf file)",
+   "year_heading": "2026",
+   "link_date": "2026-02-16",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "format-suffix-link-text",
+    "latest3",
+    "multiple-files-same-draw",
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/DRAW-RESULT-OF-RS.1500-DENOMINATIO.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/05/DRAW-RESULT-OF-RS.1500-DENOMINATIO.txt",
+   "sha256": "be17cd22540538b06eb73a9380370f1c094368994fcf7ed66ed605d355db4add",
+   "size_bytes": 12488,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Fri, 15 May 2026 17:30:59 GMT",
+   "link_text": "15-05-2026",
+   "year_heading": "2026",
+   "link_date": "2026-05-15",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": {
+    "draw_number": 106,
+    "draw_date": null,
+    "draw_date_note": "absent from file; link text 15-05-2026",
+    "city": null,
+    "tiers": [
+     {
+      "rank": 1,
+      "amount_pkr": 3000000,
+      "announced_count": null,
+      "first": "024132",
+      "last": "024132"
+     },
+     {
+      "rank": 2,
+      "amount_pkr": 1000000,
+      "announced_count": null,
+      "numbers": [
+       "026284",
+       "355420",
+       "407321"
+      ]
+     },
+     {
+      "rank": 3,
+      "amount_pkr": 18500,
+      "announced_count": null,
+      "note": "amount written 'Rs. 18, 500/-'; no '(N Prizes' line in this layout",
+      "grid_first_in_reading_order": "000040",
+      "grid_last_real_in_reading_order": "972114",
+      "filler_marker": "XXXXX (5 X)"
+     }
+    ],
+    "layout": "L-1500-SECTIONED"
+   },
+   "verification": "hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/1500_17082026.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/08/1500_17082026.pdf",
+   "sha256": "5c0216117e561176abf95afb0452934e1b6395f099df408f8420886e60c548d2",
+   "size_bytes": 1638992,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Wed, 19 Aug 2026 07:30:11 GMT",
+   "link_text": "17-08-2026",
+   "year_heading": "2026",
+   "link_date": "2026-08-17",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "latest3",
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/15-02-2019-Rs-1500.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/15-02-2019-Rs-1500.txt",
+   "sha256": "b0b5f191295cb623924043aa3a1942f92056b5a28586fba1a578f0182b3a2ed4",
+   "size_bytes": 12848,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 08:26:15 GMT",
+   "link_text": "15-02-2019",
+   "year_heading": "2019",
+   "link_date": "2019-02-15",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "oldest"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/1500-101-Updated-Draw-List.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2025/02/1500-101-Updated-Draw-List.txt",
+   "sha256": "d7cab7411c444ea2571e6c966cbda6a5b4d4ebcec75519cc8edc7e16f151c7cf",
+   "size_bytes": 12410,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Mon, 17 Feb 2025 12:40:24 GMT",
+   "link_text": "17-02-2025",
+   "year_heading": "2025",
+   "link_date": "2025-02-17",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "revision"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/DRAW-RESULT-OF-Rs.1500-DENOMINATI.txt-15-May.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2025/05/DRAW-RESULT-OF-Rs.1500-DENOMINATI.txt-15-May.txt",
+   "sha256": "37e909828ca9c15226beb674cdf0f27656750d33523fb41881959dc0e9787172",
+   "size_bytes": 12305,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Thu, 15 May 2025 21:16:18 GMT",
+   "link_text": "15-05-2025",
+   "year_heading": "2025",
+   "link_date": "2025-05-15",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "multiple-files-same-draw"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/NPBs-Rs.-1500-102-Draw-Karachi.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2025/05/NPBs-Rs.-1500-102-Draw-Karachi.pdf",
+   "sha256": "23ab9370401478634977f1c504287c4989c27edc0af51e4497d79aedfe50502d",
+   "size_bytes": 2588728,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Thu, 15 May 2025 15:31:44 GMT",
+   "link_text": "15-05-2025 (PDF File)",
+   "year_heading": "2025",
+   "link_date": "2025-05-15",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "format-suffix-link-text",
+    "multiple-files-same-draw",
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/1500-15-aug.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2025/08/1500-15-aug.pdf",
+   "sha256": "7ebb267ececd0ef70f92ee3c93a882245163afb89c9b02d2390a6fd31fdf3f3b",
+   "size_bytes": 1493807,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Fri, 15 Aug 2025 15:51:57 GMT",
+   "link_text": "15-08-2025 (pdf)",
+   "year_heading": "2025",
+   "link_date": "2025-08-15",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "format-suffix-link-text",
+    "multiple-files-same-draw",
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/DRAW-RESULT-OF-RS.1500-DENOMINATIon-15-augtxt.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2025/08/DRAW-RESULT-OF-RS.1500-DENOMINATIon-15-augtxt.txt",
+   "sha256": "55e1c7f93f6451bee99468f7163513799d1f9f45382bd868ab129cdc00c1d229",
+   "size_bytes": 12337,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Fri, 15 Aug 2025 15:49:38 GMT",
+   "link_text": "15-08-2025 (text)",
+   "year_heading": "2025",
+   "link_date": "2025-08-15",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "format-suffix-link-text",
+    "multiple-files-same-draw"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/17-08-2020-Rs-1500.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/17-08-2020-Rs-1500.txt",
+   "sha256": "ed8f14759fb395b0d643ac331c44c4404b5260bb8233dd74458f7bd862eb31ba",
+   "size_bytes": 12760,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 08:28:35 GMT",
+   "link_text": "15-08-2020",
+   "year_heading": "2020",
+   "link_date": "2020-08-15",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "filename-date-mismatch"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-1500-prize-bond-draw/Rs.1500-15-05-2019.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/Rs.1500-15-05-2019.txt",
+   "sha256": "aa18df07d4520c66c83e0e0e8999ad3a2948fc124ca94faebbcaa96ffd74bc57",
+   "size_bytes": 12739,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 08:26:47 GMT",
+   "link_text": "15-05-2019",
+   "year_heading": "2019",
+   "link_date": "2019-05-15",
+   "denomination_page": "rs-1500-prize-bond-draw",
+   "selected_because": [
+    "filename-date-mismatch"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-200-prize-bond-draw/105th-draw-of-Prize-Bond-Rs.200-d.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/03/105th-draw-of-Prize-Bond-Rs.200-d.txt",
+   "sha256": "881103dc48e89f9e593dd92231fde8a36bf8cb9d677c02a68bf22ca4862ae794",
+   "size_bytes": 18077,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Mon, 16 Mar 2026 16:45:10 GMT",
+   "link_text": "16-03-2026",
+   "year_heading": "2026",
+   "link_date": "2026-03-16",
+   "denomination_page": "rs-200-prize-bond-draw",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-200-prize-bond-draw/Rs-200-15-06-2026-106-draw.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/06/Rs-200-15-06-2026-106-draw.txt",
+   "sha256": "1fbbfe87b485ded75c140e5c8d3d0ced3837ba99afae0529f38adb41038e428f",
+   "size_bytes": 17479,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Mon, 15 Jun 2026 16:29:09 GMT",
+   "link_text": "15-06-2026",
+   "year_heading": "2026",
+   "link_date": "2026-06-15",
+   "denomination_page": "rs-200-prize-bond-draw",
+   "selected_because": [
+    "filename-date-mismatch",
+    "latest3"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-200-prize-bond-draw/200_150926.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/09/200_150926.txt",
+   "sha256": "7a535584ce5182437e27809e5eda393fdf7136e668cf1ec814ad8452cbd5edbb",
+   "size_bytes": 17615,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Wed, 16 Sep 2026 11:36:33 GMT",
+   "link_text": "15-09-2026",
+   "year_heading": "2026",
+   "link_date": "2026-09-15",
+   "denomination_page": "rs-200-prize-bond-draw",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": {
+    "draw_number": 107,
+    "draw_date": "2026-09-15",
+    "city": "SBP BSC Muzaffarabad",
+    "header_denomination_text": "Rs.200/- ... PREMIUM PRIZE BONDS",
+    "tiers": [
+     {
+      "rank": 1,
+      "amount_pkr": 750000,
+      "announced_count": 1,
+      "first": "516806",
+      "last": "516806"
+     },
+     {
+      "rank": 2,
+      "amount_pkr": 250000,
+      "announced_count": 5,
+      "first": "381066",
+      "last": "844138",
+      "numbers": [
+       "381066",
+       "425087",
+       "796229",
+       "799273",
+       "844138"
+      ]
+     },
+     {
+      "rank": 3,
+      "amount_pkr": 1250,
+      "announced_count": 2400,
+      "announced_count_semantics": "equals 1+5+2394 all prizes; also equals grid cells incl. 6 XXXXXX fillers",
+      "grid_first_in_reading_order": "000133",
+      "grid_last_real_in_reading_order": "980654",
+      "filler_cells": 6,
+      "page_markers": "Page n/4"
+     }
+    ],
+    "layout": "L-NEW-12COL-PAGED"
+   },
+   "verification": "hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-200-prize-bond-draw/15-03-2019-Rs-200.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/15-03-2019-Rs-200.txt",
+   "sha256": "6603bbe19479ff80fb10dce8c2a5e0a4fb70c951c0df2e78a5a5ab08a6e541d0",
+   "size_bytes": 17603,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 16:07:58 GMT",
+   "link_text": "15-03-2019",
+   "year_heading": "2019",
+   "link_date": "2019-03-15",
+   "denomination_page": "rs-200-prize-bond-draw",
+   "selected_because": [
+    "oldest"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-200-prize-bond-draw/Revised-Draw-Result-of-Rs.-200-Denominatio.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2025/12/Revised-Draw-Result-of-Rs.-200-Denominatio.txt",
+   "sha256": "82fa4831aff3ca3ae206f182de34e014c7394c40ca13f1661f945a882df85089",
+   "size_bytes": 17462,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Mon, 15 Dec 2025 11:00:02 GMT",
+   "link_text": "16-06-2025",
+   "year_heading": "2025",
+   "link_date": "2025-06-16",
+   "denomination_page": "rs-200-prize-bond-draw",
+   "selected_because": [
+    "revision"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-200-prize-bond-draw/15-12-2023.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/15-12-2023.pdf",
+   "sha256": "49598617348bfaad13a8466480b02fca38aeef4222da69123f379f6f34a8d4bd",
+   "size_bytes": 126499,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 16:18:41 GMT",
+   "link_text": "15-12-2023",
+   "year_heading": "2023",
+   "link_date": "2023-12-15",
+   "denomination_page": "rs-200-prize-bond-draw",
+   "selected_because": [
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-200-prize-bond-draw/15-06-2022-Rs-200.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/15-06-2022-Rs-200.txt",
+   "sha256": "bb407c292d7130c41f12c824a2ab61c65479ed6dd9d3cce0a2a915fd4d82dfac",
+   "size_bytes": 17610,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 16:10:59 GMT",
+   "link_text": "16-06-2022",
+   "year_heading": "2022",
+   "link_date": "2022-06-16",
+   "denomination_page": "rs-200-prize-bond-draw",
+   "selected_because": [
+    "filename-date-mismatch"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-200-prize-bond-draw/15-09-2021-Rs-200.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/15-09-2021-Rs-200.txt",
+   "sha256": "d393e918478281140c597c66f6e12431d286e0e7f9e69bd880b59162ca42223f",
+   "size_bytes": 17615,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 16:10:20 GMT",
+   "link_text": "16-09-2021",
+   "year_heading": "2021",
+   "link_date": "2021-09-16",
+   "denomination_page": "rs-200-prize-bond-draw",
+   "selected_because": [
+    "filename-date-mismatch"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-200-prize-bond-draw/15-12-2020-Rs-200.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/15-12-2020-Rs-200.txt",
+   "sha256": "a181b798b4f9688c3f744f2e0c1e9d1a1faadbf3bbb44d1f48b506b85795f99f",
+   "size_bytes": 17617,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 16:09:47 GMT",
+   "link_text": "16-12-2020",
+   "year_heading": "2020",
+   "link_date": "2020-12-16",
+   "denomination_page": "rs-200-prize-bond-draw",
+   "selected_because": [
+    "filename-date-mismatch"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-750-prize-bond-draw/DRAW-RESULT-OF-Rs.750-DENOMINATION.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/04/DRAW-RESULT-OF-Rs.750-DENOMINATION.txt",
+   "sha256": "01e1cf0cb6d0bcc1d8837ed221d2b47cefe56e08c011c5fe73b1f418f8363e3d",
+   "size_bytes": 12493,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Wed, 15 Apr 2026 16:52:09 GMT",
+   "link_text": "15-04-2026",
+   "year_heading": "2026",
+   "link_date": "2026-04-15",
+   "denomination_page": "rs-750-prize-bond-draw",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-750-prize-bond-draw/Rs-750-107-draw.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/07/Rs-750-107-draw.txt",
+   "sha256": "03a135561a64b49f0ac0d4a8e0ee1e8f28de81359e40090e220a0caefa263a2a",
+   "size_bytes": 12322,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Thu, 16 Jul 2026 04:37:03 GMT",
+   "link_text": "15-07-2026",
+   "year_heading": "2026",
+   "link_date": "2026-07-15",
+   "denomination_page": "rs-750-prize-bond-draw",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-750-prize-bond-draw/750_15102026-1.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/10/750_15102026-1.txt",
+   "sha256": "aa64358898e8da35ee7e27715401484a6d86531a2cd0751d5c5faae18b91b9d0",
+   "size_bytes": 12745,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Fri, 16 Oct 2026 07:32:15 GMT",
+   "link_text": "15-10-2026",
+   "year_heading": "2026",
+   "link_date": "2026-10-15",
+   "denomination_page": "rs-750-prize-bond-draw",
+   "selected_because": [
+    "latest3"
+   ],
+   "expected": {
+    "draw_number": 108,
+    "draw_date": "2026-10-15",
+    "city": "SBP BSC RAWALPINDI",
+    "tiers": [
+     {
+      "rank": 1,
+      "amount_pkr": 1500000,
+      "announced_count": 1,
+      "first": "347425",
+      "last": "347425"
+     },
+     {
+      "rank": 2,
+      "amount_pkr": 500000,
+      "announced_count": 3,
+      "numbers": [
+       "7447",
+       "827353",
+       "876615"
+      ],
+      "note": "first number is 4 digits as printed; wrong length -> must be flagged, never padded silently"
+     },
+     {
+      "rank": 3,
+      "amount_pkr": 9300,
+      "announced_count": 1696,
+      "grid_first_in_reading_order": "001081",
+      "grid_last_real_in_reading_order": "973576",
+      "filler_cells": 9,
+      "page_markers": "PART -II Page No.n/3"
+     }
+    ],
+    "layout": "L-750-PART2"
+   },
+   "verification": "hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-750-prize-bond-draw/15-01-2019-Rs-750.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/15-01-2019-Rs-750.txt",
+   "sha256": "5596dd4afb0180509ed0cfab9553df65497b3fd15d55e90fc499f864ec8270d3",
+   "size_bytes": 12698,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 17:13:36 GMT",
+   "link_text": "15-01-2019",
+   "year_heading": "2019",
+   "link_date": "2019-01-15",
+   "denomination_page": "rs-750-prize-bond-draw",
+   "selected_because": [
+    "oldest"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-750-prize-bond-draw/DRAW-RESULT-OF-RS.-750-DENOMINATION-105.txt",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/01/DRAW-RESULT-OF-RS.-750-DENOMINATION-105.txt",
+   "sha256": "56493504c4b2ea0903e377ddd5cb23f51fa21e4bb69ba26557865168292e1672",
+   "size_bytes": 12478,
+   "content_type": "text/plain",
+   "etag": null,
+   "last_modified": "Thu, 15 Jan 2026 15:16:31 GMT",
+   "link_text": "15-01-2026 (Text)",
+   "year_heading": "2026",
+   "link_date": "2026-01-15",
+   "denomination_page": "rs-750-prize-bond-draw",
+   "selected_because": [
+    "format-suffix-link-text",
+    "multiple-files-same-draw"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-750-prize-bond-draw/Draw-Result-105th-draw-of-Rs.-750-denomination.pdf",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2026/01/Draw-Result-105th-draw-of-Rs.-750-denomination.pdf",
+   "sha256": "49b2ed7de4c72425839a99472d738ebc9175e8c088fb9612dcc42af1317deade",
+   "size_bytes": 3916783,
+   "content_type": "application/pdf",
+   "etag": null,
+   "last_modified": "Thu, 15 Jan 2026 15:19:21 GMT",
+   "link_text": "15-01-2026 (pdf)",
+   "year_heading": "2026",
+   "link_date": "2026-01-15",
+   "denomination_page": "rs-750-prize-bond-draw",
+   "selected_because": [
+    "format-suffix-link-text",
+    "multiple-files-same-draw",
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  },
+  {
+   "file": "tests/fixtures/draws/rs-750-prize-bond-draw/First-Page-97th-draw-of-750-15-01-2024-1.doc",
+   "source_url": "https://savings.gov.pk/wp-content/uploads/2024/11/First-Page-97th-draw-of-750-15-01-2024-1.doc",
+   "sha256": "f50a6f85bf08ae10e228de3d873d73503e212c00f32bd4865e2a8bd43b1aff3e",
+   "size_bytes": 313856,
+   "content_type": "application/msword",
+   "etag": null,
+   "last_modified": "Tue, 12 Nov 2024 17:17:31 GMT",
+   "link_text": "15-01-2024",
+   "year_heading": "2024",
+   "link_date": "2024-01-15",
+   "denomination_page": "rs-750-prize-bond-draw",
+   "selected_because": [
+    "filename-date-mismatch",
+    "non-txt"
+   ],
+   "expected": null,
+   "verification": "pending-hand-read"
+  }
+ ]
+}
