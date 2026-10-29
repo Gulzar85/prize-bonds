@@ -115,6 +115,15 @@ them were artefacts of the quick counting script used for the survey, which did 
 **Premium 40,000 2019-03-11: 1,144 numbers against 660 announced** (the grid is 13 columns wide and the file looks like a
 different prize structure or a duplicated section), which is reported as `announced_count_mismatch` and `duplicate_number`.
 
+**Live dry run of the finished pipeline (2026-10-29, `backfill_draws --dry-run`, all six denominations, nothing written):**
+178 draws checked: **111 clean**, **46 with warnings only** (mostly a missing city/date in the header), **15 with errors**,
+**6 unreadable** here because Tesseract and LibreOffice are not installed (5 scanned PDFs and the Rs 750 `.doc`; the Rs 1,500
+draw of 2026-08-17 is one of them). The errors are: 6 draws where the file's date differs by a day from the link's (Rs 100
+2021-11-18, Rs 200 2020-12-16, 2021-09-16 and 2022-06-16, Rs 1,500 2020-08-15, Premium 40,000 2024-06-11), 3 with duplicate
+numbers and count mismatches (Rs 200 2019-09-16 and 2022-03-15, Premium 40,000 2019-03-11), the 4-digit prize number (Rs 750
+draw 108), a wrong-length number in Rs 200 2024-03-15, an OCR-looking Rs 1,500 file (2024-02-15), two Rs 750 files with no
+third-prize amount (2025-01-15, 2025-10-15), and the first-page-only Rs 100 `.docx`.
+
 **More facts found while building (all reflected in the code and ADRs 0006-0008):**
 - The official "Part-I" summaries (PDF/DOCX, and some `.txt` that copy them) state, per tier, "N Prizes of Rs.X each, M Prizes
   in each series" and "T Total Prizes (K Prizes in each series)". K is the **total of all tiers** (2,400 for Rs 200 = 1 + 5 +
