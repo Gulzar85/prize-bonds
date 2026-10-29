@@ -13,6 +13,21 @@ A public, multi-tenant app for Pakistani households to track National Savings pr
 - Tenant isolation enforced at all levels
 - Comprehensive security (CSP, HSTS, Argon2, etc.)
 
+## Phase 1 - Draw engine
+
+Discovers, downloads, parses, validates and (after human review) publishes every National Savings prize bond draw from
+savings.gov.pk, and serves it through a public anonymous API.
+
+- Review queue, review screen and manual upload: Django admin > Draws > Draw revisions (`data_operator` group + MFA).
+- Public API (no auth, throttled, cached 5 minutes): `GET /api/v1/public/denominations/`, `draws/`, `draws/{id}/`,
+  `draws/{id}/numbers/?tier=`, `POST check/` (50 numbers or 5 ranges of at most 1,000). Every response carries a disclaimer.
+- Backfill history: `python manage.py backfill_draws --dry-run` first, then without `--dry-run`
+  (`--denomination SLUG`, `--since YEAR`, `--approve-clean --as EMAIL`).
+- Celery: a dedicated `ingestion` queue and worker (see `infra/compose.yaml`). Beat runs discovery daily at 09:10 Asia/Karachi,
+  draw-day polling every 30 minutes from 12:00 to 23:30, a weekly revision watch and the watchdogs.
+- Docs: [source survey](docs/research/nss-source-survey.md), ADRs 0006-0008, [draw-day runbook](docs/runbooks/draw-day.md).
+- Optional system tools for non-text sources: Tesseract (scanned PDFs) and LibreOffice (`.doc`).
+
 ## Quick Start
 
 ### Prerequisites

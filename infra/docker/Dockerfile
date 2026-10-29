@@ -14,7 +14,14 @@ ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1     PATH="/app/.venv/bin:$PATH"
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl     && rm -rf /var/lib/apt/lists/*     && useradd -m -u 1000 app
+# The ingestion worker also needs Tesseract (scanned PDFs) and LibreOffice (.doc); other images stay slim.
+ARG INSTALL_INGESTION_TOOLS=0
+RUN apt-get update && apt-get install -y --no-install-recommends curl \
+    && if [ "$INSTALL_INGESTION_TOOLS" = "1" ]; then \
+         apt-get install -y --no-install-recommends tesseract-ocr libreoffice-writer; \
+       fi \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd -m -u 1000 app
 
 COPY --from=builder /app/.venv /app/.venv
 COPY --chown=app:app backend /app
