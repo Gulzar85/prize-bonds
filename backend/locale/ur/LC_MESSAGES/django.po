@@ -1,0 +1,30 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: prizebonds\n"
+"Language: ur\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Assalam o Alaikum,"
+msgstr "السلام علیکم،"
+
+msgid "Prize Bond Tracker is an unofficial tool and is not affiliated with National Savings (CDNS)."
+msgstr "پرائز بانڈ ٹریکر ایک غیر سرکاری ٹول ہے اور قومی بچت (CDNS) سے وابستہ نہیں ہے۔"
+
+msgid "Your email verification code is: %(code)s"
+msgstr "آپ کا ای میل تصدیقی کوڈ یہ ہے: %(code)s"
+
+msgid "Please confirm your email address to activate your account:"
+msgstr "اپنا اکاؤنٹ فعال کرنے کے لیے براہِ کرم اپنے ای میل ایڈریس کی تصدیق کریں:"
+
+msgid "Confirm your email address"
+msgstr "اپنے ای میل ایڈریس کی تصدیق کریں"
+
+msgid "We received a request to reset your password. If this was not you, you can ignore this email. Otherwise, use the link below:"
+msgstr "ہمیں آپ کا پاس ورڈ ری سیٹ کرنے کی درخواست موصول ہوئی ہے۔ اگر یہ آپ نے نہیں کی تو اس ای میل کو نظرانداز کر دیں۔ ورنہ نیچے دیا گیا لنک استعمال کریں:"
+
+msgid "Reset your password"
+msgstr "اپنا پاس ورڈ ری سیٹ کریں"
+

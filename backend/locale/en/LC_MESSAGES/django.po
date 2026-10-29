@@ -1,0 +1,30 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: prizebonds\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Assalam o Alaikum,"
+msgstr ""
+
+msgid "Prize Bond Tracker is an unofficial tool and is not affiliated with National Savings (CDNS)."
+msgstr ""
+
+msgid "Your email verification code is: %(code)s"
+msgstr ""
+
+msgid "Please confirm your email address to activate your account:"
+msgstr ""
+
+msgid "Confirm your email address"
+msgstr ""
+
+msgid "We received a request to reset your password. If this was not you, you can ignore this email. Otherwise, use the link below:"
+msgstr ""
+
+msgid "Reset your password"
+msgstr ""
+

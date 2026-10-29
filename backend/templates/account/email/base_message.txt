@@ -1,0 +1,6 @@
+{% load i18n %}{% autoescape off %}{% trans "Assalam o Alaikum," %}
+
+{% block content %}{% endblock content %}
+
+{% trans "Prize Bond Tracker is an unofficial tool and is not affiliated with National Savings (CDNS)." %}
+{% endautoescape %}
