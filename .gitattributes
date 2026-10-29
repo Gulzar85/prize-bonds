@@ -1,0 +1,3 @@
+# Fixtures are byte-exact copies of third-party files (hashes in manifest.json); never convert line endings.
+backend/tests/fixtures/** -text
+backend/apps/draws/ingestion/certs/** -text
