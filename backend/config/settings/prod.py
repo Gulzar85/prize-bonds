@@ -33,3 +33,20 @@ if SENTRY_DSN:
         traces_sample_rate=0.1,
         send_default_pii=False,
     )
+
+DRAWS_FOUR_EYES = env.bool("DRAWS_FOUR_EYES", default=True)  # type: ignore
+
+# Raw draw files live in a private S3-compatible bucket (never public; pre-signed access only).
+if env("DRAWS_S3_BUCKET", default=""):  # type: ignore
+    STORAGES["draws_raw"] = {  # type: ignore
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "bucket_name": env("DRAWS_S3_BUCKET"),  # type: ignore
+            "endpoint_url": env("DRAWS_S3_ENDPOINT_URL", default=None),  # type: ignore
+            "access_key": env("DRAWS_S3_ACCESS_KEY", default=None),  # type: ignore
+            "secret_key": env("DRAWS_S3_SECRET_KEY", default=None),  # type: ignore
+            "default_acl": "private",
+            "querystring_auth": True,
+            "file_overwrite": False,
+        },
+    }

@@ -147,6 +147,11 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+    # Raw source files from savings.gov.pk. Private: never served publicly (prod uses a private S3-compatible bucket).
+    "draws_raw": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {"location": BASE_DIR / "private_media" / "draws"},
+    },
 }
 
 # Media files
@@ -309,6 +314,16 @@ HEALTH_READY_CHECKS = [
     "health_check.checks.Cache",
     "health_check.contrib.celery.Ping",
 ]
+
+# Draw engine: polite, allow-listed fetching of National Savings results
+DRAWS_CONTACT_EMAIL = env("DRAWS_CONTACT_EMAIL", default="gulzar85@hotmail.com")
+DRAWS_USER_AGENT = f"PrizeBondTracker/1.0 (+mailto:{DRAWS_CONTACT_EMAIL})"
+DRAWS_ALLOWED_HOSTS = ("savings.gov.pk", "www.savings.gov.pk")
+DRAWS_INDEX_URL = "https://savings.gov.pk/download-draws/"
+DRAWS_MIN_REQUEST_INTERVAL = env.float("DRAWS_MIN_REQUEST_INTERVAL", default=2.0)  # seconds between requests
+DRAWS_MAX_FILE_BYTES = 20 * 1024 * 1024
+DRAWS_FOUR_EYES = env.bool("DRAWS_FOUR_EYES", default=False)  # on in prod: uploader may not approve their own upload
+DRAWS_AUTO_APPROVE_CLEAN_BACKFILL = env.bool("DRAWS_AUTO_APPROVE_CLEAN_BACKFILL", default=True)
 
 # Frontend URL
 FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")

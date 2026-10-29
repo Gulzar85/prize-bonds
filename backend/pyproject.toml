@@ -74,7 +74,7 @@ ignore = ["S101"]
 [tool.mypy]
 python_version = "3.14"
 plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
-exclude = ["migrations/", "apps/draws/", "apps/draws_temp/"]
+exclude = ["migrations/"]
 
 [[tool.mypy.overrides]]
 module = ["apps.*", "api.*"]
@@ -90,7 +90,7 @@ module = ["apps.households.rules", "apps.core.tasks"]
 ignore_errors = true
 
 [[tool.mypy.overrides]]
-module = ["celery.*"]
+module = ["celery.*", "pytesseract.*"]
 ignore_missing_imports = true
 
 [tool.django-stubs]

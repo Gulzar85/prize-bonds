@@ -270,13 +270,13 @@ def parse(text: str) -> ParseResult:
         if rank not in seen_ranks:
             continue
         announced = counts.get(rank)
-        amount = amounts.get(rank)
-        if announced is None and amount is not None and amount in summary_counts:
-            announced = summary_counts[amount]
+        tier_amount = amounts.get(rank)
+        if announced is None and tier_amount is not None and tier_amount in summary_counts:
+            announced = summary_counts[tier_amount]
         tiers.append(
             ParsedTier(
                 rank=rank,
-                amount_pkr=amount,
+                amount_pkr=tier_amount,
                 announced_count=announced,
                 numbers=tuple(tier_numbers[rank]),
                 filler_count=fillers if rank == 3 else 0,
