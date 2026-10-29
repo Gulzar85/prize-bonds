@@ -43,6 +43,8 @@ class ParseResult:
     grid_cells: int
     #: "N Prizes in each series" total from an official Part-I summary, when present (all tiers).
     announced_total: int | None = None
+    #: Third-prize grid rows as printed (fillers kept as written), for sort checks.
+    grid_rows: tuple[tuple[str, ...], ...] = ()
     warnings: tuple[Finding, ...] = ()
 
     def tier(self, rank: int) -> ParsedTier | None:

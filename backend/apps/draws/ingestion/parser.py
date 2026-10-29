@@ -164,6 +164,7 @@ def parse(text: str) -> ParseResult:
     announced_total: int | None = None
     fillers = 0
     grid_cells = 0
+    grid_rows: list[tuple[str, ...]] = []
     seen_ranks: list[int] = []
     unrecognised: list[tuple[int, str]] = []
     current: int | None = None
@@ -237,6 +238,8 @@ def parse(text: str) -> ParseResult:
                     tier_numbers[current].append(cell)
                 if current == 3:
                     grid_cells += 1
+            if current == 3:
+                grid_rows.append(tuple(cells))
             continue
 
         # "01 Prize:   516806" / "05 Prizes  1 2 3": a count prefix followed by numbers.
@@ -288,5 +291,6 @@ def parse(text: str) -> ParseResult:
         tiers=tuple(tiers),
         grid_cells=grid_cells,
         announced_total=announced_total,
+        grid_rows=tuple(grid_rows),
         warnings=tuple(header_findings + findings),
     )
