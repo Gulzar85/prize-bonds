@@ -38,7 +38,7 @@ class Membership(UUIDModel, TimeStampedModel):
         ordering = ["-created_at"]
         constraints = [
             models.CheckConstraint(
-                check=models.Q(role__in=["OWNER", "EDITOR", "VIEWER"]),
+                condition=models.Q(role__in=["OWNER", "EDITOR", "VIEWER"]),
                 name="valid_membership_role",
             ),
         ]

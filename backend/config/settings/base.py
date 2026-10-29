@@ -46,9 +46,6 @@ THIRD_PARTY_APPS = [
     "auditlog",
     "django_celery_beat",
     "health_check",
-    "health_check.db",
-    "health_check.cache",
-    "health_check.contrib.celery_ping",
 ]
 
 LOCAL_APPS = [
@@ -166,15 +163,14 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = env.int("SITE_ID", default=1)
 
 # Allauth configuration
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_VERIFICATION = env("ACCOUNT_EMAIL_VERIFICATION", default="mandatory")
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USER_MODEL_EMAIL_FIELD = "email"
 ACCOUNT_ADAPTER = "apps.accounts.adapter.AccountAdapter"
 ACCOUNT_FORMS = {}
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 
 # Allauth MFA
 MFA_SUPPORTED_TYPES = ["totp", "recovery_codes"]
@@ -274,21 +270,47 @@ CACHES = {
     }
 }
 
-# Email - Dictionary-based settings for Django 6.1
-EMAIL = {
-    "host": env("EMAIL_HOST", default="localhost"),
-    "port": env.int("EMAIL_PORT", default=1025),
-    "use_tls": env.bool("EMAIL_USE_TLS", default=False),
-    "use_ssl": env.bool("EMAIL_USE_SSL", default=False),
-    "host_user": env("EMAIL_HOST_USER", default=""),
-    "host_password": env("EMAIL_HOST_PASSWORD", default=""),
-    "default_from_email": env("DEFAULT_FROM_EMAIL", default="noreply@prizebonds.local"),
+# Email - Django 6.1 MAILERS
+MAILERS = {
+    "default": {
+        "BACKEND": env("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend"),
+        "OPTIONS": {
+            "host": env("EMAIL_HOST", default="localhost"),
+            "port": env.int("EMAIL_PORT", default=1025),
+            "use_tls": env.bool("EMAIL_USE_TLS", default=False),
+            "use_ssl": env.bool("EMAIL_USE_SSL", default=False),
+            "username": env("EMAIL_HOST_USER", default=""),
+            "password": env("EMAIL_HOST_PASSWORD", default=""),
+        },
+    },
 }
 
-DEFAULT_FROM_EMAIL = EMAIL["default_from_email"]
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="noreply@prizebonds.local")
+
+# Readiness probe: DB, cache and the Celery broker/worker.
+HEALTH_READY_CHECKS = [
+    "health_check.checks.Database",
+    "health_check.checks.Cache",
+    "health_check.contrib.celery.Ping",
+]
 
 # Frontend URL
 FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:3000")
+
+# CSP - Django 6.1 format
+from django.utils.csp import CSP
+
+SECURE_CSP = {
+    "default-src": [CSP.SELF],
+    "script-src": [CSP.SELF],
+    "style-src": [CSP.SELF],
+    "img-src": [CSP.SELF, "data:"],
+    "font-src": [CSP.SELF],
+    "connect-src": [CSP.SELF],
+    "frame-ancestors": [CSP.NONE],
+    "base-uri": [CSP.SELF],
+    "form-action": [CSP.SELF],
+}
 
 # Logging
 LOGGING = {

@@ -7,7 +7,7 @@ from django.utils import timezone
 from apps.core.models import UUIDModel
 
 
-class UserManager:
+class UserManager(models.Manager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError("The Email field must be set")

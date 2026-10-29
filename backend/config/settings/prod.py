@@ -15,20 +15,7 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
-# CSP
-SECURE_CSP = {
-    "DIRECTIVES": {
-        "default-src": ("'self'",),
-        "script-src": ("'self'",),
-        "style-src": ("'self'",),
-        "img-src": ("'self'", "data:",),
-        "font-src": ("'self'",),
-        "connect-src": ("'self'",),
-        "frame-ancestors": ("'none'",),
-        "base-uri": ("'self'",),
-        "form-action": ("'self'",),
-    }
-}
+# CSP already defined in base for Django 6.1
 
 # Sentry
 SENTRY_DSN = env("SENTRY_DSN", default="")  # type: ignore
