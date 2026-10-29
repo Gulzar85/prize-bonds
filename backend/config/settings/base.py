@@ -4,6 +4,7 @@ from pathlib import Path
 
 import django_stubs_ext
 import environ
+from celery.schedules import crontab
 
 django_stubs_ext.monkeypatch()
 
@@ -279,6 +280,23 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# Extraction runs in its own queue with its own worker (concurrency and memory caps in infra/compose.yaml).
+CELERY_TASK_ROUTES = {"draws.*": {"queue": "ingestion"}}
+CELERY_TASK_SOFT_TIME_LIMIT = 1800
+CELERY_TASK_TIME_LIMIT = 2100
+CELERY_BEAT_SCHEDULE = {
+    "draws-discover-daily": {"task": "draws.discover", "schedule": crontab(hour=9, minute=10)},
+    # Draw day: every 30 minutes 12:00-23:30; the task itself narrows to hourly after the draw day.
+    "draws-poll-draw-day": {"task": "draws.poll_draw_day", "schedule": crontab(hour="12-23", minute="0,30")},
+    "draws-revision-watch-weekly": {
+        "task": "draws.revision_watch",
+        "schedule": crontab(day_of_week="sun", hour=3, minute=0),
+    },
+    "draws-check-missing": {"task": "draws.check_missing_draws", "schedule": crontab(hour=10, minute=0)},
+    "draws-check-overdue-reviews": {"task": "draws.check_overdue_reviews", "schedule": crontab(minute=15)},
+    "draws-process-outbox": {"task": "draws.process_outbox", "schedule": 60.0},
+}
 
 # Cache
 CACHES = {

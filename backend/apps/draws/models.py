@@ -42,6 +42,8 @@ class DrawSchedule(UUIDModel, TimeStampedModel):
     denomination = models.ForeignKey(Denomination, on_delete=models.CASCADE, related_name="schedules")
     scheduled_date = models.DateField()
     city = models.CharField(max_length=100, blank=True)
+    #: Set when the "draw not found" alert was sent, so it fires once.
+    missing_alerted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["scheduled_date"]
@@ -112,6 +114,7 @@ class DrawRevision(UUIDModel, TimeStampedModel):
             "reviewed_at",
             "review_note",
             "diff_from_previous",
+            "overdue_alerted_at",
             "extraction_method",
             "parsed_header",
             "parse_warnings",
@@ -148,6 +151,7 @@ class DrawRevision(UUIDModel, TimeStampedModel):
     reviewed_at = models.DateTimeField(null=True, blank=True)
     review_note = models.TextField(blank=True)
     diff_from_previous = models.JSONField(default=dict, blank=True)
+    overdue_alerted_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["draw_id", "-revision_no"]

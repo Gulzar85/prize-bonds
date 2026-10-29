@@ -66,7 +66,13 @@ services:
 
   worker:
     <<: *app
-    command: celery -A config worker -l info
+    command: celery -A config worker -l info -Q celery
+
+  # Document extraction (PDF/DOC/OCR) is the memory-hungry part, so it has its own queue, worker and limits.
+  worker-ingestion:
+    <<: *app
+    command: celery -A config worker -l info -Q ingestion --concurrency=1 --max-memory-per-child=400000
+    mem_limit: 768m
 
   beat:
     <<: *app
