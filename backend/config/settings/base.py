@@ -208,6 +208,7 @@ REST_FRAMEWORK = {
 }
 
 # allauth headless: JWT access/refresh tokens for native clients (see ADR 0004)
+HEADLESS_SERVE_SPECIFICATION = True  # allauth OpenAPI spec for the auth endpoints, served beside them
 HEADLESS_TOKEN_STRATEGY = "allauth.headless.tokens.strategies.jwt.JWTTokenStrategy"
 HEADLESS_JWT_ALGORITHM = "RS256"
 HEADLESS_JWT_PRIVATE_KEY = env("JWT_PRIVATE_KEY", default="").replace(chr(92) + "n", chr(10))

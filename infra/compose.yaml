@@ -1,3 +1,25 @@
+# Full local stack: `make up` (copy .env.example to .env first).
+x-app: &app
+  build:
+    context: ..
+    dockerfile: infra/docker/Dockerfile
+  env_file:
+    - ../.env
+  environment: &app-env
+    DJANGO_SETTINGS_MODULE: config.settings.dev
+    DATABASE_URL: postgres://prizebonds:prizebonds@db:5432/prizebonds
+    REDIS_URL: redis://redis:6379/0
+    CELERY_BROKER_URL: redis://redis:6379/1
+    CELERY_RESULT_BACKEND: redis://redis:6379/2
+    EMAIL_HOST: mailpit
+    EMAIL_PORT: "1025"
+  depends_on:
+    db:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  user: app
+
 services:
   db:
     image: postgres:17
@@ -32,21 +54,10 @@ services:
       - "8025:8025"
 
   api:
-    build:
-      context: ..
-      dockerfile: infra/docker/Dockerfile
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4
-    volumes:
-      - ../backend:/app
+    <<: *app
+    command: sh -c "python manage.py migrate --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4"
     ports:
       - "8000:8000"
-    env_file:
-      - ../.env
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health/live/"]
       interval: 30s
@@ -54,32 +65,12 @@ services:
       retries: 3
 
   worker:
-    build:
-      context: ..
-      dockerfile: infra/docker/Dockerfile
+    <<: *app
     command: celery -A config worker -l info
-    volumes:
-      - ../backend:/app
-    env_file:
-      - ../.env
-    depends_on:
-      - db
-      - redis
-    user: app
 
   beat:
-    build:
-      context: ..
-      dockerfile: infra/docker/Dockerfile
+    <<: *app
     command: celery -A config beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
-    volumes:
-      - ../backend:/app
-    env_file:
-      - ../.env
-    depends_on:
-      - db
-      - redis
-    user: app
 
 volumes:
   postgres_data:

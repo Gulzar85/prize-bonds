@@ -1,0 +1,410 @@
+openapi: 3.0.3
+info:
+  title: Prize Bond Tracker API
+  version: 1.0.0
+paths:
+  /api/v1/households/:
+    get:
+      operationId: households_list
+      summary: List my households
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - households
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedHouseholdList'
+              examples:
+                Household:
+                  value:
+                    next: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+                    previous: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+                    results:
+                    - id: 0192f1c0-7b1e-7c3a-9d52-3f1c2a4b5d6e
+                      name: Ahmed's Household
+                      role: OWNER
+                      created_at: '2026-10-24T09:00:00Z'
+          description: ''
+  /api/v1/households/{household_id}/:
+    get:
+      operationId: households_retrieve
+      description: |-
+        Resolve the household from ``/households/{household_id}/...`` and enforce tenancy.
+
+        * Non-members (and unknown households) get 404, never 403, so existence never leaks.
+        * Members lacking the method's permission get 403.
+        * ``scope_queryset`` restricts household-owned models to the resolved household.
+
+        Must precede the DRF generic view in the MRO.
+      summary: Get a household
+      parameters:
+      - in: path
+        name: household_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - households
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Household'
+              examples:
+                Household:
+                  value:
+                    id: 0192f1c0-7b1e-7c3a-9d52-3f1c2a4b5d6e
+                    name: Ahmed's Household
+                    role: OWNER
+                    created_at: '2026-10-24T09:00:00Z'
+          description: ''
+    patch:
+      operationId: households_partial_update
+      description: |-
+        Resolve the household from ``/households/{household_id}/...`` and enforce tenancy.
+
+        * Non-members (and unknown households) get 404, never 403, so existence never leaks.
+        * Members lacking the method's permission get 403.
+        * ``scope_queryset`` restricts household-owned models to the resolved household.
+
+        Must precede the DRF generic view in the MRO.
+      summary: Rename a household (owner only)
+      parameters:
+      - in: path
+        name: household_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - households
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedHouseholdUpdate'
+            examples:
+              Rename:
+                value:
+                  name: Family Vault
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedHouseholdUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedHouseholdUpdate'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Household'
+          description: ''
+  /api/v1/households/{household_id}/members/:
+    get:
+      operationId: households_members_list
+      description: |-
+        Resolve the household from ``/households/{household_id}/...`` and enforce tenancy.
+
+        * Non-members (and unknown households) get 404, never 403, so existence never leaks.
+        * Members lacking the method's permission get 403.
+        * ``scope_queryset`` restricts household-owned models to the resolved household.
+
+        Must precede the DRF generic view in the MRO.
+      summary: List household members
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: path
+        name: household_id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - households
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMemberList'
+          description: ''
+  /api/v1/me/:
+    get:
+      operationId: me_retrieve
+      summary: Get my profile
+      tags:
+      - me
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+              examples:
+                Profile:
+                  value:
+                    id: 0192f1c0-7b1e-7c3a-9d52-3f1c2a4b5d6e
+                    email: ahmed@example.com
+                    full_name: Ahmed Khan
+                    phone: '+923001234567'
+                    preferred_language: ur
+          description: ''
+    patch:
+      operationId: me_partial_update
+      summary: Update my profile
+      tags:
+      - me
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMe'
+            examples:
+              Update:
+                value:
+                  full_name: Ahmed Khan
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMe'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMe'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+          description: ''
+components:
+  schemas:
+    Household:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - role
+    Me:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        full_name:
+          type: string
+          maxLength: 255
+        phone:
+          oneOf:
+          - type: string
+            pattern: ^\+[1-9]\d{7,14}$
+            maxLength: 16
+          - type: string
+            maxLength: 0
+        preferred_language:
+          $ref: '#/components/schemas/PreferredLanguageEnum'
+      required:
+      - email
+      - id
+    Member:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        full_name:
+          type: string
+          readOnly: true
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - email
+      - full_name
+      - id
+      - role
+    PaginatedHouseholdList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Household'
+    PaginatedMemberList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Member'
+    PatchedHouseholdUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+    PatchedMe:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          readOnly: true
+        full_name:
+          type: string
+          maxLength: 255
+        phone:
+          oneOf:
+          - type: string
+            pattern: ^\+[1-9]\d{7,14}$
+            maxLength: 16
+          - type: string
+            maxLength: 0
+        preferred_language:
+          $ref: '#/components/schemas/PreferredLanguageEnum'
+    PreferredLanguageEnum:
+      enum:
+      - en
+      - ur
+      type: string
+      description: |-
+        * `en` - English
+        * `ur` - Urdu
+    RoleEnum:
+      enum:
+      - OWNER
+      - EDITOR
+      - VIEWER
+      type: string
+      description: |-
+        * `OWNER` - Owner
+        * `EDITOR` - Editor
+        * `VIEWER` - Viewer
+  securitySchemes:
+    tokenAuth:
+      type: http
+      scheme: bearer

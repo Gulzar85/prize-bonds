@@ -1,38 +1,30 @@
-# Multi-stage build using uv
+# syntax=docker/dockerfile:1
+# Build context is the repository root (see infra/compose.yaml).
 FROM ghcr.io/astral-sh/uv:python3.14-bookworm-slim AS builder
 
+ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 WORKDIR /app
 
-# Install dependencies
-COPY backend/pyproject.toml backend/uv.lock* ./
-RUN uv sync --frozen --no-dev || uv sync --no-dev
+COPY backend/pyproject.toml backend/uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
 
-# Final stage
 FROM python:3.14-slim-bookworm
 
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1     PATH="/app/.venv/bin:$PATH"     DJANGO_SETTINGS_MODULE=config.settings.prod
+
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends curl     && rm -rf /var/lib/apt/lists/*     && useradd -m -u 1000 app
 
-# Create non-root user
-RUN useradd -m -u 1000 app && chown -R app:app /app
-
-# Copy virtual environment
 COPY --from=builder /app/.venv /app/.venv
-ENV PATH="/app/.venv/bin:$PATH"
+COPY --chown=app:app backend /app
 
-# Copy application
-COPY backend /app
-RUN chown -R app:app /app
+# Static files need settings to import; these values are build-time placeholders only.
+RUN SECRET_KEY=build-only DATABASE_URL=sqlite:///:memory: python manage.py collectstatic --noinput     && chown -R app:app /app/staticfiles
 
 USER app
-
 EXPOSE 8000
 
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8000/health/live/ || exit 1
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3     CMD curl -fsS http://localhost:8000/health/live/ || exit 1
 
-CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "config.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "4"]

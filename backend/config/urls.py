@@ -7,6 +7,8 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 from health_check.views import HealthCheckView
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import AllowAny, IsAdminUser
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -20,33 +22,23 @@ urlpatterns = [
     ),
 ]
 
-# Only serve docs in DEBUG or for staff
-if settings.DEBUG:
-    urlpatterns += [
-        path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
-        path(
-            "api/v1/schema/swagger-ui/",
-            SpectacularSwaggerView.as_view(url_name="schema"),
-            name="swagger-ui",
+# Schema is public; the interactive UIs are for DEBUG or staff only.
+ui_auth = [SessionAuthentication]  # staff browse the docs with their admin session
+ui_permissions = [AllowAny] if settings.DEBUG else [IsAdminUser]
+urlpatterns += [
+    path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path(
+        "api/v1/schema/swagger-ui/",
+        SpectacularSwaggerView.as_view(
+            url_name="schema", permission_classes=ui_permissions, authentication_classes=ui_auth
         ),
-        path(
-            "api/v1/schema/redoc/",
-            SpectacularRedocView.as_view(url_name="redoc"),
-            name="redoc",
+        name="swagger-ui",
+    ),
+    path(
+        "api/v1/schema/redoc/",
+        SpectacularRedocView.as_view(
+            url_name="schema", permission_classes=ui_permissions, authentication_classes=ui_auth
         ),
-    ]
-else:
-    # In production, still allow staff to access docs
-    urlpatterns += [
-        path("api/v1/schema/", SpectacularAPIView.as_view(permission_classes=[]), name="schema"),
-        path(
-            "api/v1/schema/swagger-ui/",
-            SpectacularSwaggerView.as_view(url_name="schema", permission_classes=[]),
-            name="swagger-ui",
-        ),
-        path(
-            "api/v1/schema/redoc/",
-            SpectacularRedocView.as_view(url_name="redoc", permission_classes=[]),
-            name="redoc",
-        ),
-    ]
+        name="redoc",
+    ),
+]

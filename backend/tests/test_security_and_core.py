@@ -156,3 +156,18 @@ def test_cursor_pagination_is_default(client_for):
     assert len(body["results"]) == 2
     assert body["next"] and "cursor=" in body["next"]
     assert timezone.now()
+
+
+@pytest.mark.django_db
+def test_schema_is_public_but_ui_is_staff_only(client):
+    assert client.get("/api/v1/schema/").status_code == 200
+    assert client.get("/api/v1/schema/swagger-ui/").status_code == 403
+    assert client.get("/api/v1/schema/redoc/").status_code == 403
+    staff = UserFactory(is_staff=True)
+    client.force_login(staff, backend=BACKEND)
+    assert client.get("/api/v1/schema/swagger-ui/").status_code == 200
+
+
+@pytest.mark.django_db
+def test_auth_endpoint_spec_is_served(client):
+    assert client.get("/api/v1/auth/openapi.yaml").status_code == 200

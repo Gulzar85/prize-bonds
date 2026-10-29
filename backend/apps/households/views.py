@@ -28,6 +28,7 @@ HOUSEHOLD_EXAMPLE = {
 class HouseholdListView(generics.ListAPIView[Household]):
     permission_classes = [IsAuthenticated]
     serializer_class = HouseholdSerializer
+    queryset = Household.objects.none()  # schema generation only; see get_queryset
 
     def get_queryset(self):  # type: ignore[no-untyped-def]
         return selectors.households_for_user(self.request.user)  # type: ignore[arg-type]
