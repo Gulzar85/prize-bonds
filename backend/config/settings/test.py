@@ -63,3 +63,12 @@ STORAGES = {
     **STORAGES,
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
 }
+
+REST_FRAMEWORK = {
+    **REST_FRAMEWORK,
+    "DEFAULT_THROTTLE_RATES": {
+        **REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"],  # type: ignore[dict-item]
+        "public": "100000/minute",
+        "public_check": "100000/minute",
+    },
+}

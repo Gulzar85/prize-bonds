@@ -212,6 +212,9 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "anon": "100/hour",
         "user": "1000/hour",
+        # Anonymous public draw API: per client IP; check/ is the expensive one.
+        "public": "120/minute",
+        "public_check": "20/minute",
     },
     "EXCEPTION_HANDLER": "apps.core.exceptions.custom_exception_handler",
 }

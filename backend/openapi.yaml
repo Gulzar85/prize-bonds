@@ -240,8 +240,469 @@ paths:
               schema:
                 $ref: '#/components/schemas/Me'
           description: ''
+  /api/v1/public/check/:
+    post:
+      operationId: public_check_create
+      description: Send up to 50 numbers and/or up to 5 ranges of at most 1,000 numbers
+        each, all for one denomination. Returns every published win for those numbers
+        across all draws.
+      summary: Check numbers against every published draw
+      tags:
+      - public
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckRequest'
+            examples:
+              NumbersAndARange:
+                value:
+                  denomination: rs-200
+                  numbers:
+                  - '516806'
+                  - '000001'
+                  ranges:
+                  - from: '123400'
+                    to: '123499'
+                summary: Numbers and a range
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CheckRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CheckRequest'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckResponse'
+              examples:
+                AWin:
+                  value:
+                    denomination: rs-200
+                    wins:
+                    - number: '516806'
+                      draw_id: 0192f1c0-7b1e-7c3a-9d52-3f1c2a4b5d6e
+                      draw_number: 107
+                      draw_date: '2026-09-15'
+                      tier: 1
+                      amount_pkr: 750000
+                    disclaimer: Unofficial data compiled from files published by the
+                      Central Directorate of National Savings. It may contain errors
+                      or omissions. Always verify a win with National Savings (savings.gov.pk)
+                      before claiming any prize.
+                  summary: A win
+          description: ''
+  /api/v1/public/denominations/:
+    get:
+      operationId: public_denominations_retrieve
+      description: Anonymous, throttled, cacheable. Subclasses set ``throttle_classes``
+        when they need a tighter limit.
+      summary: List denominations
+      tags:
+      - public
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DenominationList'
+              examples:
+                Denominations:
+                  value:
+                    results:
+                    - slug: rs-200
+                      value_pkr: 200
+                      kind: REGULAR
+                      name_en: Rs 200 Prize Bond
+                      name_ur: 200 روپے پرائز بانڈ
+                      number_length: 6
+                    disclaimer: Unofficial data compiled from files published by the
+                      Central Directorate of National Savings. It may contain errors
+                      or omissions. Always verify a win with National Savings (savings.gov.pk)
+                      before claiming any prize.
+          description: ''
+  /api/v1/public/draws/:
+    get:
+      operationId: public_draws_list
+      description: Anonymous, throttled, cacheable. Subclasses set ``throttle_classes``
+        when they need a tighter limit.
+      summary: List published draws
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: denomination
+        schema:
+          type: string
+        description: Denomination slug, e.g. rs-200
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: year
+        schema:
+          type: integer
+        description: Draw year, e.g. 2026
+      tags:
+      - public
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDrawSummaryList'
+              examples:
+                PageOfDraws:
+                  value:
+                    next: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+                    previous: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+                    results:
+                    - id: 0192f1c0-7b1e-7c3a-9d52-3f1c2a4b5d6e
+                      denomination: rs-200
+                      denomination_value: 200
+                      draw_number: 107
+                      draw_date: '2026-09-15'
+                      city: Muzaffarabad
+                      revised: false
+                    disclaimer: Unofficial data compiled from files published by the
+                      Central Directorate of National Savings. It may contain errors
+                      or omissions. Always verify a win with National Savings (savings.gov.pk)
+                      before claiming any prize.
+                  summary: Page of draws
+          description: ''
+  /api/v1/public/draws/{id}/:
+    get:
+      operationId: public_draws_retrieve
+      description: Header, prize tiers, the first and second prize numbers, published/revised
+        dates and the source URL.
+      summary: Get one published draw
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - public
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DrawDetail'
+              examples:
+                Draw:
+                  value:
+                    id: 0192f1c0-7b1e-7c3a-9d52-3f1c2a4b5d6e
+                    denomination: rs-200
+                    denomination_value: 200
+                    draw_number: 107
+                    draw_date: '2026-09-15'
+                    city: Muzaffarabad
+                    revised: false
+                    published_at: '2026-09-15T14:30:00Z'
+                    revised_at: null
+                    source_url: https://savings.gov.pk/wp-content/uploads/2026/09/200_150926.txt
+                    tiers:
+                    - rank: 1
+                      amount_pkr: 750000
+                      count: 1
+                      numbers:
+                      - '516806'
+                    - rank: 2
+                      amount_pkr: 250000
+                      count: 5
+                      numbers:
+                      - '381066'
+                      - '425087'
+                      - '796229'
+                      - '799273'
+                      - '844138'
+                    - rank: 3
+                      amount_pkr: 1250
+                      count: 2394
+                      numbers: null
+                    disclaimer: Unofficial data compiled from files published by the
+                      Central Directorate of National Savings. It may contain errors
+                      or omissions. Always verify a win with National Savings (savings.gov.pk)
+                      before claiming any prize.
+          description: ''
+  /api/v1/public/draws/{id}/numbers/:
+    get:
+      operationId: public_draws_numbers_list
+      description: Anonymous, throttled, cacheable. Subclasses set ``throttle_classes``
+        when they need a tighter limit.
+      summary: List a draw's winning numbers
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: path
+        name: id
+        schema:
+          type: string
+          format: uuid
+        required: true
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: tier
+        schema:
+          type: integer
+        description: 1, 2 or 3
+      tags:
+      - public
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPublicNumberList'
+              examples:
+                Numbers:
+                  value:
+                    next: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+                    previous: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+                    results:
+                    - number: '000133'
+                      tier: 3
+                    disclaimer: Unofficial data compiled from files published by the
+                      Central Directorate of National Savings. It may contain errors
+                      or omissions. Always verify a win with National Savings (savings.gov.pk)
+                      before claiming any prize.
+          description: ''
 components:
   schemas:
+    CheckRequest:
+      type: object
+      properties:
+        denomination:
+          type: string
+        numbers:
+          type: array
+          items:
+            type: string
+            maxLength: 10
+            pattern: ^\d+$
+          description: Up to 50 bond numbers, digits only, zero padded to the denomination's
+            length
+          maxItems: 50
+        ranges:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+              maxLength: 10
+          description: 'Up to 5 inclusive ranges of at most 1000 numbers each, e.g.
+            {''from'': ''123400'', ''to'': ''123499''}'
+          maxItems: 5
+      required:
+      - denomination
+    CheckResponse:
+      type: object
+      properties:
+        denomination:
+          type: string
+        wins:
+          type: array
+          items:
+            $ref: '#/components/schemas/Win'
+        disclaimer:
+          type: string
+      required:
+      - denomination
+      - disclaimer
+      - wins
+    Denomination:
+      type: object
+      properties:
+        slug:
+          type: string
+          readOnly: true
+          pattern: ^[-a-zA-Z0-9_]+$
+        value_pkr:
+          type: integer
+          readOnly: true
+        kind:
+          allOf:
+          - $ref: '#/components/schemas/KindEnum'
+          readOnly: true
+        name_en:
+          type: string
+          readOnly: true
+        name_ur:
+          type: string
+          readOnly: true
+        number_length:
+          type: integer
+          readOnly: true
+      required:
+      - kind
+      - name_en
+      - name_ur
+      - number_length
+      - slug
+      - value_pkr
+    DenominationList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Denomination'
+        disclaimer:
+          type: string
+      required:
+      - disclaimer
+      - results
+    DrawDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        denomination:
+          type: string
+          readOnly: true
+        denomination_value:
+          type: integer
+          readOnly: true
+        draw_number:
+          type: integer
+          readOnly: true
+          nullable: true
+        draw_date:
+          type: string
+          format: date
+          readOnly: true
+        city:
+          type: string
+          readOnly: true
+        revised:
+          type: boolean
+          readOnly: true
+          description: True when the published result replaced an earlier revision
+        published_at:
+          type: string
+          format: date-time
+          readOnly: true
+          description: When the result was first published here
+        revised_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        source_url:
+          type: string
+          readOnly: true
+          nullable: true
+        tiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tier'
+          readOnly: true
+      required:
+      - city
+      - denomination
+      - denomination_value
+      - draw_date
+      - draw_number
+      - id
+      - published_at
+      - revised
+      - revised_at
+      - source_url
+      - tiers
+    DrawSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        denomination:
+          type: string
+          readOnly: true
+        denomination_value:
+          type: integer
+          readOnly: true
+        draw_number:
+          type: integer
+          readOnly: true
+          nullable: true
+        draw_date:
+          type: string
+          format: date
+          readOnly: true
+        city:
+          type: string
+          readOnly: true
+        revised:
+          type: boolean
+          readOnly: true
+          description: True when the published result replaced an earlier revision
+      required:
+      - city
+      - denomination
+      - denomination_value
+      - draw_date
+      - draw_number
+      - id
+      - revised
     Household:
       type: object
       properties:
@@ -265,6 +726,14 @@ components:
       - id
       - name
       - role
+    KindEnum:
+      enum:
+      - REGULAR
+      - PREMIUM
+      type: string
+      description: |-
+        * `REGULAR` - Regular
+        * `PREMIUM` - Premium
     Me:
       type: object
       properties:
@@ -319,6 +788,30 @@ components:
       - full_name
       - id
       - role
+    PaginatedDrawSummaryList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DrawSummary'
+        disclaimer:
+          type: string
+          example: Unofficial data compiled from files published by the Central Directorate
+            of National Savings. It may contain errors or omissions. Always verify
+            a win with National Savings (savings.gov.pk) before claiming any prize.
     PaginatedHouseholdList:
       type: object
       required:
@@ -357,6 +850,30 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Member'
+    PaginatedPublicNumberList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicNumber'
+        disclaimer:
+          type: string
+          example: Unofficial data compiled from files published by the Central Directorate
+            of National Savings. It may contain errors or omissions. Always verify
+            a win with National Savings (savings.gov.pk) before claiming any prize.
     PatchedHouseholdUpdate:
       type: object
       properties:
@@ -394,6 +911,18 @@ components:
       description: |-
         * `en` - English
         * `ur` - Urdu
+    PublicNumber:
+      type: object
+      properties:
+        number:
+          type: string
+          readOnly: true
+        tier:
+          type: integer
+          readOnly: true
+      required:
+      - number
+      - tier
     RoleEnum:
       enum:
       - OWNER
@@ -404,6 +933,55 @@ components:
         * `OWNER` - Owner
         * `EDITOR` - Editor
         * `VIEWER` - Viewer
+    Tier:
+      type: object
+      properties:
+        rank:
+          type: integer
+          readOnly: true
+        amount_pkr:
+          type: integer
+          readOnly: true
+        count:
+          type: integer
+          readOnly: true
+        numbers:
+          type: array
+          items:
+            type: string
+          nullable: true
+          readOnly: true
+          description: Listed for the first and second prize only; see /numbers/
+      required:
+      - amount_pkr
+      - count
+      - numbers
+      - rank
+    Win:
+      type: object
+      properties:
+        number:
+          type: string
+        draw_id:
+          type: string
+          format: uuid
+        draw_number:
+          type: integer
+          nullable: true
+        draw_date:
+          type: string
+          format: date
+        tier:
+          type: integer
+        amount_pkr:
+          type: integer
+      required:
+      - amount_pkr
+      - draw_date
+      - draw_id
+      - draw_number
+      - number
+      - tier
   securitySchemes:
     tokenAuth:
       type: http
